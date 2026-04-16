@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id              String        @id @default(uuid())
+  email           String        @unique
+  name            String?
+  password        String
+  role            Role          @default(USER)
+
+  plan            Plan          @default(FREE)
+  dailyUsage      Int           @default(0)
+  usageResetAt    DateTime      @default(now())
+
+  limitBroadcasts   Int           @default(15)
+  usedBroadcasts     Int           @default(0)
+  usedExcel         Int           @default(0)
+  limitExcel        Int           @default(1000)
+
+  broadcasts      Broadcast[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Broadcast {
+  id          String          @id @default(uuid())
+  userId      String
+  title       String?
+  status      BroadcastStatus @default(PENDING)
+  totalRows   Int
+  successRows Int             @default(0)
+  failedRows  Int             @default(0)
+
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum BroadcastStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "limitBroadcasts" INTEGER NOT NULL DEFAULT 15,
+ADD COLUMN     "limitExcel" INTEGER NOT NULL DEFAULT 1000;
