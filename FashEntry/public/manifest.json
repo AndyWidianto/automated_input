@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "SaaS Auto-Filler & Broadcaster",
+  "version": "1.0",
+  "description": "Otomatisasi input data Excel ke berbagai website target.",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs",
+    "sidePanel"
+  ],
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "host_permissions": [
+    "<all_urls>" 
+  ],
+  "action": {
+    "default_title": "Buka Evolve Automator"
+  }
+}
