@@ -2,9 +2,9 @@ import { handleError } from "@/app/lib/ErrorHandle";
 import { deleteBroadcast, updateBroadcast } from "@/app/lib/services/broadcastService";
 import { NextResponse } from "next/server";
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const id = params.id;
+        const { id } = await params;
         const headers = request.headers;
         const authHeader = headers.get("Authorization");
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -19,9 +19,9 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     }
 }
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const id = params.id;
+        const { id } = await params;
         const headers = request.headers;
         const data = await request.json();
         const authHeader = headers.get("Authorization");
