@@ -1,3 +1,5 @@
+"use client";
+
 import { toast } from "sonner";
 import useAxios from "./Axios";
 import { useState } from "react";
