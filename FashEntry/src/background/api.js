@@ -1,10 +1,28 @@
-declare const chrome: any;
-
 import axios from "axios";
 
-const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:3000/api";
 
 
+const getTokenFromWeb = () => {
+    return new Promise((resolve, _reject) => {
+        chrome.cookies.get({
+            url: baseUrl,
+            name: "refreshToken"
+        }, (cookie) => {
+            if (chrome.runtime.lastError) {
+                return resolve(null);
+            }
+
+            if (cookie) {
+                resolve(cookie.value);
+            } else {
+                resolve(null);
+            }
+        });
+    });
+};
+
+
+const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 export const apiPrivate = axios.create({
     baseURL: baseUrl,
     timeout: 20000
@@ -18,10 +36,10 @@ export const apiPublic = axios.create({
 apiPrivate.interceptors.request.use(
     async (config) => {
         const result = await new Promise((resolve) => {
-            chrome.storage.local.get(['token'], (res: any) => resolve(res));
+            chrome.storage.local.get(['token'], (res) => resolve(res));
         });
 
-        const token = (result as any)?.token;
+        const token = result?.token;
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -40,17 +58,17 @@ apiPrivate.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            const state = await chrome.storage.local.get(["refresh_token"]);
-            const refreshToken = state.refresh_token;
+            const refreshToken = await getTokenFromWeb();
             if (!refreshToken) {
                 console.log("Tidak ada refresh token, silakan login ulang");
-                window.location.href = "/#/login"; 
+                chrome.tabs.create({ url: `${baseUrl}/login` });
                 return;
             }
             try {
-                const response = await apiPublic.post("/auth/refreshToken", { refresh_token: refreshToken }, { withCredentials: true });
+                const response = await apiPublic.post("/api/auth/refreshToken", { refresh_token: refreshToken }, { withCredentials: true });
 
                 const { accessToken } = response.data;
+                console.log("AccessToken Baru: ", accessToken);
 
                 await chrome.storage.local.set({
                     token: accessToken
@@ -60,7 +78,11 @@ apiPrivate.interceptors.response.use(
 
             } catch (refreshError) {
                 console.error("Refresh token expired. Logging out...");
-                await chrome.storage.local.clear();
+                chrome.runtime.sendMessage({
+                    action: "LOGOUT_REQUIRED"
+                })
+                await chrome.storage.local.remove("token");
+                await chrome.storage.local.remove("refresh_token");
                 return Promise.reject(refreshError);
             }
         }

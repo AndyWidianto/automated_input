@@ -1,77 +1,24 @@
-import React, { useState } from 'react';
+"use client";
+
 import { Mail, Lock, User, CheckCircle } from 'lucide-react';
-import { apiPublic } from '../shared/axios.service';
-import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import useSignup from '../lib/hooks/Signup';
 
 
-interface FormDataToInput {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+
 const SignUp = () => {
-  const [formData, setFormData] = useState<FormDataToInput>({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [errors, setErrors] = useState<Partial<FormDataToInput>>({});
-  const naviagate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const validateForm = () => {
-    let errors: Partial<FormDataToInput> = {};
-    if (!formData.username.trim()) {
-      errors.username = "Username is required";
-    }
-    if (!formData.email.trim()) {
-      errors.email = "Email is required";
-    }
-    if (!formData.password) {
-      errors.password = "Password is required";
-    }
-    if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = "Passwords do not match!";
-    }
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!validateForm()) return;
-
-    try {
-      const res = await apiPublic.post('/auth/register', {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password
-      });
-      toast.success('Registration successful!');
-      console.log('Registration successful:', res.data);
-      naviagate('/login');
-    } catch (error) {
-      toast.error('Registration failed!');
-      console.error('Registration failed:', error);
-    }
-    
-    console.log(formData);
-  };
+  const {
+    handleChange,
+    handleRegister,
+    errors,
+    formData
+  } = useSignup()
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex items-center justify-center gap-x-3">
-          {/* Ganti dengan Logo Anda */}
           <div className="h-10 w-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">A</span>
+            <span className="text-white font-bold text-xl">AN</span>
           </div>
           <span className="text-3xl font-extrabold text-gray-950">Automate</span>
         </div>

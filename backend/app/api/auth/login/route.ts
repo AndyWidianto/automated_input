@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         cookieStore.set("refreshToken", refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'none',
+            sameSite: 'strict',
             maxAge: 3600000
         })
         return NextResponse.json({ success, message, accessToken, refreshToken }, { status: 200 });

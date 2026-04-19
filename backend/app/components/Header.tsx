@@ -11,9 +11,9 @@ interface NavItem {
 
 
 const navItems: NavItem[] = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Blog', href: '/' },
+    { name: 'Home', href: '/home' },
+    { name: 'About', href: '/home/about' },
+    { name: 'Blog', href: '/home/' },
 ];
 
 export default function Header() {

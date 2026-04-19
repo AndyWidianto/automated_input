@@ -1,13 +1,27 @@
 {
   "manifest_version": 3,
-  "name": "SaaS Auto-Filler & Broadcaster",
+  "name": "Broadcast Form Auto",
   "version": "1.0",
-  "description": "Otomatisasi input data Excel ke berbagai website target.",
+  "description": "Streamline bulk form submissions by automatically sending Excel data to multiple web forms with speed and accuracy.",
+  "icons": {
+    "16": "icons/16x16.png",
+    "32": "icons/32x32.png",
+    "192": "icons/192x192.png",
+    "512": "icons/512x512.png"
+  },
+  "action": {
+    "default_title": "Open Broadcast Form Auto",
+    "default_icon": {
+      "16": "icons/16x16.png",
+      "32": "icons/32x32.png"
+    }
+  },
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
   "permissions": [
+    "cookies",
     "storage",
     "activeTab",
     "scripting",
@@ -17,17 +31,11 @@
   "side_panel": {
     "default_path": "index.html"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content_script.js"],
-      "run_at": "document_idle"
-    }
-  ],
   "host_permissions": [
-    "<all_urls>" 
+    "https://anstoreautomated.biz.id/*"
   ],
-  "action": {
-    "default_title": "Buka Evolve Automator"
-  }
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ]
 }

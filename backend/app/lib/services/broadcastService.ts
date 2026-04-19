@@ -7,11 +7,19 @@ import { AppError, BadRequestError, UnauthorizedError } from "../errors";
 
 export async function createBroadcast(token: string, { title, totalRows }: { title: string; totalRows: number }) {
     const verifyToken = verifyAccessToken(token);
-    if (!verifyToken) {
-        throw new UnauthorizedError("Unauthorized");
-    }
 
-    const userId = (verifyToken as any).userId;
+    const userId = verifyToken.userId;
+    const user = await prisma.user.findUnique({
+        where: { id: userId }
+    });
+    if (!user) {
+        throw new AppError("User not found", 404);
+    }
+    if (user.plan === "FREE" || user.plan === "PRO") {
+        if (user.usedBroadcasts >= user.limitBroadcasts) {
+            throw new AppError("Broadcast telah mencapai limit! Upgrade untuk melakukan broadcast lebih banyak", 429)
+        }
+    }
     const broadcast = await prisma.broadcast.create({
         data: {
             title,
@@ -20,7 +28,7 @@ export async function createBroadcast(token: string, { title, totalRows }: { tit
             userId,
         },
     });
-    return { success: true, message: "Broadcast created successfully", broadcast };
+    return broadcast;
 }
 
 export async function getBroadcasts(token: string) {
@@ -78,7 +86,6 @@ export async function deleteBroadcast(token: string, broadcastId: string) {
 }
 
 export async function updateBroadcast(token: string, broadcastId: string, data: UpdateBroadcast) {
-
     const fieldData = ["title", "totalRows", "status", "successRows", "failedRows"];
     Object.keys(data).forEach((key) => {
         if (!fieldData.includes(key)) {
@@ -90,12 +97,19 @@ export async function updateBroadcast(token: string, broadcastId: string, data: 
     if (!verifyToken) {
         throw new UnauthorizedError("Unauthorized");
     }
+    const userId = verifyToken.userId;
 
-    const userId = (verifyToken as any).userId;
-    const broadcast = await prisma.broadcast.findFirst({
-        where: { id: broadcastId, userId },
-    });
-
+    const [user, broadcast] = await prisma.$transaction([
+        prisma.user.findUnique({
+            where: { id: userId }
+        }),
+        prisma.broadcast.findFirst({
+            where: { id: broadcastId, userId },
+        })
+    ]);
+    if (!user) {
+        throw new AppError("User not found", 404);
+    }
     if (!broadcast) {
         throw new AppError("Broadcast not found", 404);
     }
@@ -105,6 +119,11 @@ export async function updateBroadcast(token: string, broadcastId: string, data: 
             ...query,
             successRows: broadcast.successRows + data.successRows,
         };
+        if (user.plan === "FREE" || user.plan === "PRO") {
+            if ((user.usedBroadcasts + 1) > user.limitBroadcasts) {
+                throw new AppError("Broadcast telah mencapai limit! Upgrade untuk melakukan broadcast lebih banyak atau tunggu besok", 429);
+            }
+        }
     }
 
     if (data.failedRows) {
@@ -114,20 +133,21 @@ export async function updateBroadcast(token: string, broadcastId: string, data: 
         }
     }
 
-    await prisma.$transaction([
-        prisma.broadcast.update({
-            where: { id: broadcastId },
-            data: query,
-        }),
-        prisma.user.update({
+    await prisma.broadcast.update({
+        where: { id: broadcastId },
+        data: query,
+    })
+
+    if (data.successRows) {
+        await prisma.user.update({
             where: { id: userId },
             data: {
                 usedBroadcasts: {
-                    increment: 1
+                    increment: data.successRows
                 }
             }
         })
-    ])
+    }
 
     return { success: true, message: "Broadcast updated successfully" };
 }

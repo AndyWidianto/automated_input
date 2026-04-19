@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 
 
 export async function updateUser(token: string, data: UpdateUser) {
-    const allowedFields = ["name", "email", "password", "usedExcel"];
+    const allowedFields = ["name", "email", "password"];
     Object.keys(data).forEach((key) => {
         if (!allowedFields.includes(key)) {
             delete data[key as keyof UpdateUser];
@@ -33,12 +33,6 @@ export async function updateUser(token: string, data: UpdateUser) {
     }
 
     let query = { ...data };
-    if (data.usedExcel) {
-        query = {
-            ...query,
-            usedExcel: user.usedExcel + data.usedExcel,
-        }
-    }
 
     await prisma.user.update({
         where: { id: userId },
@@ -46,4 +40,18 @@ export async function updateUser(token: string, data: UpdateUser) {
     });
 
     return { success: true, message: "User updated successfully" };
+}
+
+
+export async function getProfile(token: string) {
+    const verifyToken = verifyAccessToken(token);
+    const existing = await prisma.user.findUnique({
+        where: { id: verifyToken.userId },
+        select: {
+            name: true,
+            email: true,
+            plan: true,
+        }
+    });
+    return existing;
 }

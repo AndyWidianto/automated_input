@@ -1,11 +1,8 @@
 import jwt from "jsonwebtoken";
+import { UnauthorizedError } from "./errors";
+import { TokenPayload } from "./types";
 
 
-interface TokenPayload extends jwt.JwtPayload {
-    userId: string;
-    role: string;
-    email: string;
-}
 const JWT_SECRET_ACCESS_TOKEN = process.env.JWT_SECRET_ACCESS_TOKEN!;
 const JWT_SECRET_REFRESH_TOKEN = process.env.JWT_SECRET_REFRESH_TOKEN!;
 export function createAccessToken({ userId, role, email }: { userId: string; role: string; email: string }) {
@@ -16,20 +13,28 @@ export function createRefreshToken({ userId, role, email }: { userId: string; ro
     return jwt.sign({ userId, role, email }, JWT_SECRET_REFRESH_TOKEN, { expiresIn: "7d" });
 }
 
-export function verifyAccessToken(token: string) {
+
+function verifyToken(token: string, secret: string): TokenPayload {
     try {
-        return jwt.verify(token, JWT_SECRET_ACCESS_TOKEN) as TokenPayload;
+        return jwt.verify(token, secret) as TokenPayload;
     } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
+        if (error instanceof jwt.TokenExpiredError) {
+            console.error("Token status: Expired");
+            throw new UnauthorizedError("Token telah kadaluwarsa");
+        }
+
+        if (error instanceof jwt.JsonWebTokenError) {
+            console.error("Token status: Malformed/Invalid Signature");
+            throw new UnauthorizedError("Token tidak valid");
+        }
+
+        console.error("Token status: Unknown error", error);
+        throw new UnauthorizedError("Gagal memvalidasi sesi");
     }
 }
 
-export function verifyRefreshToken(token: string) {
-    try {
-        return jwt.verify(token, JWT_SECRET_REFRESH_TOKEN) as TokenPayload;
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
-    }
-}
+export const verifyAccessToken = (token: string) =>
+    verifyToken(token, JWT_SECRET_ACCESS_TOKEN);
+
+export const verifyRefreshToken = (token: string) =>
+    verifyToken(token, JWT_SECRET_REFRESH_TOKEN);

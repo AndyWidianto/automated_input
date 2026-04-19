@@ -18,7 +18,7 @@ export async function GET() {
             return NextResponse.json({ success: false, message: result.message }, { status: 401 });
         }
 
-        return NextResponse.json(result.accessToken, { status: 200 });
+        return NextResponse.json({ accessToken: result.accessToken }, { status: 200 });
     } catch (error) {
         return handleError(error);
     }
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ success: false, message: result.message }, { status: 401 });
         }
 
-        return NextResponse.json(result.accessToken, { status: 200 });
+        return NextResponse.json({ accessToken: result.accessToken }, { status: 200 });
     } catch (error) {
         return handleError(error);
     }

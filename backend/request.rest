@@ -1,0 +1,28 @@
+
+
+### 
+POST http://localhost:3000/api/createTransaction
+
+{
+    "planId": "pro"
+}
+
+
+### Login
+POST http://localhost:3000/api/auth/login
+
+{
+    "email": "andy@gmail.com",
+    "password": "andy12345"
+}
+
+
+### Broadcast
+POST http://localhost:3000/api/broadcast
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1N2EyZmMzYi01M2EwLTQ3MzYtOTlhZS0yZTA2ZTliOGVjZjkiLCJyb2xlIjoiVVNFUiIsImVtYWlsIjoiYW5keUBnbWFpbC5jb20iLCJpYXQiOjE3NzY0OTg2ODAsImV4cCI6MTc3NjQ5OTU4MH0.gSF8V36iuIUV9XpyGF1Mt5FTj0gdreb9SK3apAO9smA
+Content-Type: application/json
+
+{
+    "title": "test123312",
+    "totalRows": 10
+}

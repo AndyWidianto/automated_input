@@ -1,11 +1,10 @@
-import { ApiError } from "next/dist/server/api-utils";
 import { NextResponse } from "next/server";
-import { BadRequestError, UnauthorizedError } from "./errors";
+import { AppError, BadRequestError, UnauthorizedError } from "./errors";
 
 export function handleError(error: unknown) {
     console.error("API Error Log:", error);
 
-    if (error instanceof ApiError) {
+    if (error instanceof AppError) {
         return NextResponse.json(
             {
                 success: false,
@@ -23,7 +22,7 @@ export function handleError(error: unknown) {
                 message: error.message,
                 code: error.statusCode || "API_ERROR",
             },
-            { status: error.statusCode }
+            { status: 401 }
         );
     }
 
@@ -34,7 +33,7 @@ export function handleError(error: unknown) {
                 message: error.message,
                 code: error.statusCode || "API_ERROR",
             },
-            { status: error.statusCode }
+            { status: 400 }
         );
     }
 

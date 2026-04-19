@@ -1,5 +1,4 @@
-import Profile001 from '../assets/profile001.jpeg';
-import { GithubIcon, LinkedinIcon } from "../components/Icons";
+import { GithubIcon, LinkedinIcon } from "../../components/Icons";
 
 export default function AboutPage() {
   return (
@@ -92,7 +91,7 @@ export default function AboutPage() {
 
           <div className="bg-white rounded-3xl shadow-lg p-10 border border-gray-100 max-w-xl mx-auto">
             <img
-              src={Profile001}
+              src="/profile001.jpeg"
               alt="Andy Widianto"
               className="w-28 h-28 rounded-full mx-auto mb-6 object-cover"
             />
