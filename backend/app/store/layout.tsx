@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import useAxios from "../lib/hooks/Axios";
 
 
-export default function LayoutApp({ children }: { children: React.ReactElement }) {
+export default function LayoutApp({ children }: { children: React.ReactNode }) {
   const { apiPrivate } = useAxios();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
