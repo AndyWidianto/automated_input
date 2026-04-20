@@ -1,13 +1,22 @@
 "use client";
 
 import { ArrowLeftIcon, ShieldCheckIcon } from 'lucide-react';
-import useCheckout from "../../lib/hooks/Checkout";
+import useCheckout from "../../../lib/hooks/Checkout";
+import { useParams } from 'next/navigation';
+import Script from 'next/script';
 
 const CheckoutPage = () => {
-  const { selectedPlan, tax, adminFee, totalPrice, handlePayment, loading } = useCheckout();
+  const { plan } = useParams();
+  const clientKey = process.env.MIDTRANS_CLIENT_KEY;
+  const { selectedPlan, handlePayment, loading, stat } = useCheckout(plan as string);
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-1">
+      <Script
+        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key={clientKey}
+        strategy="afterInteractive"
+      />
       {loading && <div className='fixed top-0 left-0 w-full h-screen bg-black/20 flex justify-center items-center z-50'><div className="w-10 h-10 rounded-full border-3 border-gray-200 border-t-blue-600 animate-spin"></div></div>}
       <div className="max-w-5xl mx-auto">
         {/* Tombol Kembali */}
@@ -23,14 +32,13 @@ const CheckoutPage = () => {
               <h3 className="text-lg font-bold text-gray-900 mb-4">Detail Langganan</h3>
               <div className="flex items-start justify-between p-4 bg-blue-50 rounded-xl border border-blue-100">
                 <div>
-                  <p className="font-bold text-blue-900">{selectedPlan.name}</p>
-                  <p className="text-sm text-blue-700">Penagihan Bulanan</p>
+                  <p className="font-bold text-blue-900">{selectedPlan?.name}</p>
                 </div>
-                <p className="font-bold text-blue-900">Rp {selectedPlan.price.toLocaleString('id-ID')}</p>
+                <p className="font-bold text-blue-900">Rp.{selectedPlan?.price.toLocaleString('id-ID')}/{selectedPlan?.period.toLowerCase().slice(0, 5)}</p>
               </div>
               
               <ul className="mt-6 space-y-3">
-                {selectedPlan.features.map((f, i) => (
+                {selectedPlan?.features.map((f, i) => (
                   <li key={i} className="text-sm text-gray-600 flex items-center">
                     <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3"></span>
                     {f}
@@ -55,22 +63,22 @@ const CheckoutPage = () => {
               <div className="space-y-4 text-sm text-gray-600">
                 <div className="flex justify-between">
                   <span>Harga Paket</span>
-                  <span>Rp {selectedPlan.price.toLocaleString('id-ID')}</span>
+                  <span>Rp {selectedPlan?.price.toLocaleString('id-ID')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Pajak (PPN 11%)</span>
-                  <span>Rp {tax.toLocaleString('id-ID')}</span>
+                  <span>Rp {stat.tax.toLocaleString('id-ID')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Biaya Admin</span>
-                  <span>Rp {adminFee.toLocaleString('id-ID')}</span>
+                  <span>Rp {stat.adminFee.toLocaleString('id-ID')}</span>
                 </div>
                 
                 <hr className="border-gray-100 my-4" />
                 
                 <div className="flex justify-between text-lg font-extrabold text-gray-900">
                   <span>Total Bayar</span>
-                  <span className="text-blue-600">Rp {totalPrice.toLocaleString('id-ID')}</span>
+                  <span className="text-blue-600">Rp {stat.totalPrice.toLocaleString('id-ID')}</span>
                 </div>
               </div>
 

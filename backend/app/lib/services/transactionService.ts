@@ -1,4 +1,7 @@
 import MidtransClient from "midtrans-client";
+import { verifyAccessToken } from "../token.service";
+import { prisma } from "../prisma";
+import { AppError } from "../errors";
 
 const serverKey = process.env.MIDTRANS_SERVER_KEY || "";
 const clientKey = process.env.MIDTRANS_CLIENT_KEY || "";
@@ -9,25 +12,40 @@ const snap = new MidtransClient.Snap({
     clientKey: clientKey
 })
 
-export async function createTransaction(planId: "pro" | "enterpise") {
-    const plans = {
-        pro: 49000,
-        enterpise: 99000
+export async function createTransaction(token: string, planId: string) {
+    const verifyToken = verifyAccessToken(token);
+    const [plan, user] = await prisma.$transaction([
+        prisma.planModel.findFirst({
+            where: { id: planId }
+        }),
+        prisma.user.findUnique({
+            where: { id: verifyToken.userId }
+        })
+    ])
+
+    if (!plan) {
+        throw new AppError("Plan not found", 404);
+    }
+    if (!user) {
+        throw new AppError("User not found", 404);
     }
 
-    const basePrice = plans[planId];
-    const tax = basePrice * 0.11;
+    const basePrice = plan.price;
+    const taxRate = 0.11;
     const adminFee = 2500;
-    const total = basePrice + tax + adminFee;
+
+    const tax = basePrice.times(taxRate);
+    const total = basePrice.plus(tax).plus(adminFee);
 
     const parameter = {
         transaction_details: {
             order_id: `ORDER-${Date.now()}-1213321`,
-            gross_amount: total
+            gross_amount: total.toNumber()
         },
         customer_details: {
-            first_name: "Andy",
-            email: "andywidianto@gmail.com"
+            id: user.id,
+            first_name: user.name,
+            email: user.email
         },
         item_details: [
             { id: planId, price: basePrice, quantity: 1, name: `${planId} Package` },

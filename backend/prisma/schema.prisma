@@ -35,6 +35,32 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+enum PlanPeriod {
+  MONTHLY
+  YEARLY
+  LIFETIME
+}
+
+model PlanModel {
+  id          String     @id
+  name        String
+  price       Decimal    @db.Decimal(10, 2)
+  period      PlanPeriod @default(MONTHLY)
+  discount    Int        @default(0)
+  description String     @db.Text
+  features    String[]
+  color       String?
+
+  isActive      Boolean @default(true)
+  isRecommended Boolean @default(false)
+  order         Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("plans")
+}
+
 model RefreshToken {
   id        String   @id @default(uuid())
   token     String   @unique

@@ -86,7 +86,7 @@ const PaymentPage = () => {
                   : 'bg-slate-900 text-white hover:bg-slate-800 shadow-xl shadow-slate-200'
                 } active:scale-95`}
             >
-              {plan.id === 'pro' ? 'Upgrade Sekarang' : 'Hubungi Tim Sales'}
+              Upgrade Sekarang
               <ArrowRightIcon className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
             </button>
           </div>

@@ -1,46 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Plan } from "../types";
 import { useRouter } from "next/navigation";
+import useAxios from "./Axios";
+import { toast } from "sonner";
 
 
 export default function usePayment() {
-    const [selectedPlan, setSelectedPlan] = useState<'pro' | 'enterprise'>('pro');
+    const { apiPrivate } = useAxios();
+    const [selectedPlan, setSelectedPlan] = useState<string>('pro');
+    const [plans, setPlans] = useState<Plan[]>([]);
     const router = useRouter();
 
-    const plans: Plan[] = [
-        {
-            id: 'pro',
-            name: 'Pro Plan',
-            price: 25000,
-            period: '/bulan',
-            description: 'Cocok untuk pengguna aktif yang ingin mengotomatisasi proses input dan broadcast data dengan lebih cepat.',
-            features: [
-                '500 Broadcast/day',
-                'Multi User Access maks 5',
-            ],
-            color: 'blue'
-        },
-        {
-            id: 'enterprise',
-            name: 'Enterprise',
-            price: 100000,
-            period: '/bulan',
-            description: 'Solusi lengkap untuk tim dan bisnis yang membutuhkan otomatisasi data skala besar dengan kontrol lebih.',
-            features: [
-                'Unlimited Broadcast',
-                'Multi User Access maks 5',
-                'Custom Automation Flow',
-            ],
-            color: 'indigo'
-        }
-    ];
-
     const handleCheckout = (plan: Plan) => {
-        localStorage.setItem("plan", JSON.stringify(plan));
-        router.push("/app/payment/checkout")
+        router.push(`/store/checkout/${plan.id}`)
     }
+
+    const fetchPlans = async () => {
+        try {
+            const res = await apiPrivate.get("/api/plans");
+            console.log(res.data);
+            const data = res.data;
+            setPlans(data);
+        } catch (err) {
+            console.error(err);
+            toast.error("Maaf terjadi kesalahan mohon periksa jaringan ada!");
+        }
+    }
+
+    useEffect(() => {
+        fetchPlans();
+    }, []);
 
     return {
         plans,

@@ -1,22 +1,47 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiPrivate } from "../axios.service";
 import { Plan } from "../types";
+import useAxios from "./Axios";
+import { toast } from "sonner";
 
-export default function useCheckout() {
+export default function useCheckout(plan: string) {
+    const { apiPrivate } = useAxios();
     const [loading, setLoading] = useState(false);
-    const selectedPlan: Plan = JSON.parse(localStorage.getItem("plan") || "");
+    const [stat, setStat] = useState({
+        tax: 0,
+        adminFee: 0,
+        totalPrice: 0
+    })
+    const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
     const route = useRouter();
 
-    const tax = selectedPlan.price * 0.11;
-    const adminFee = 2500;
-    const totalPrice = selectedPlan.price + tax + adminFee;
+    const fetchPlan = async () => {
+        try {
+            const res = await apiPrivate.get(`/api/plans/${plan}`);
+            console.log(res.data);
+            const data = res.data;
+            setSelectedPlan(res.data);
+            const basePrice = Number(data.price);
+            const tax = basePrice * 0.11;
+            const adminFee = 2500;
+            const totalPrice = basePrice + tax + adminFee;
+            setStat({
+                tax,
+                adminFee,
+                totalPrice
+            });
+        } catch (err) {
+            console.log("Terjadi kesalahan:", err);
+            toast.error("Plan tidak tersedia!");
+        }
+    }
 
     const handlePayment = async () => {
+        if (!selectedPlan) return;
         setLoading(true);
         try {
-            const res = await apiPrivate.post("/createTransaction", { planId: selectedPlan.id });
+            const res = await apiPrivate.post("/api/createTransaction", { planId: selectedPlan.id });
             console.log(res.data);
             const data = res.data;
             setTimeout(() => {
@@ -43,16 +68,12 @@ export default function useCheckout() {
     }
 
     useEffect(() => {
-        if (!selectedPlan || !selectedPlan.id) {
-            route.push("/app/payment");
-        }
+        fetchPlan();
     }, []);
 
     return {
         selectedPlan,
-        tax,
-        adminFee,
-        totalPrice,
+        stat,
         handlePayment,
         loading,
         setLoading
