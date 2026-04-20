@@ -1,5 +1,7 @@
 import { ThumbsUp } from "lucide-react";
 
+
+
 export const PricingTier = ({ tier, isMostPopular }: { tier: any; isMostPopular?: boolean }) => (
     <div className={`relative flex flex-col p-8 bg-white border border-gray-200 rounded-3xl shadow-sm ${isMostPopular ? 'ring-2 ring-emerald-600' : ''}`}>
         {isMostPopular && (
