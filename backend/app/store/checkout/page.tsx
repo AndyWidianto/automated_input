@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowLeftIcon, ShieldCheckIcon } from 'lucide-react';
 import useCheckout from "../../lib/hooks/Checkout";
 
