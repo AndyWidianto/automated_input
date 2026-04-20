@@ -29,41 +29,55 @@ export default function HomePage() {
           {/* Background Decor (Subtle) */}
           <div className="absolute -right-8 -top-8 w-32 h-32 bg-emerald-50 rounded-full blur-3xl group-hover:bg-emerald-100 transition-colors"></div>
 
-          <div className="relative z-10">
-            <div className="flex justify-between items-start mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
-                <FileSpreadsheet className="w-8 h-8 text-emerald-600" />
+          <div className="relative z-10 group">
+            {/* Header: Img & Badge */}
+            <div className="flex flex-col gap-y-6 mb-6">
+              <div className="flex justify-between items-start">
+                {/* Gambar dibuat jauh lebih besar (w-24 h-24) */}
+                <div className="w-24 h-24 rounded-3xl bg-emerald-50 flex items-center justify-center shadow-md shadow-emerald-100/50 group-hover:scale-105 transition-transform duration-500 overflow-hidden border border-emerald-100">
+                  <img
+                    src="/automated_excel.png"
+                    alt="automated"
+                    className="w-16 h-16 object-contain"
+                  />
+                </div>
+                <span className="bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg border border-emerald-100">
+                  Productivity
+                </span>
               </div>
-              <span className="bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                Productivity
-              </span>
             </div>
 
-            <h2 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">
-              Broadcast from Excel
-            </h2>
+            {/* Text Content */}
+            <div>
+              <h2 className="text-2xl font-extrabold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors tracking-tight">
+                Broadcast from Excel
+              </h2>
 
-            <p className="text-slate-500 leading-relaxed mb-8 text-[15px]">
-              Otomatisasi pengiriman pesan massal langsung dari file Excel. Hemat waktu hingga 90% tanpa perlu input manual satu per satu.
-            </p>
+              {/* Description dengan line-clamp agar minimal & maksimal 2 baris */}
+              <p className="text-slate-600 leading-relaxed mb-8 text-[15px] line-clamp-2 min-h-[3rem]">
+                Otomatisasi pengiriman pesan massal langsung dari file Excel. Hemat waktu hingga 90% tanpa perlu input manual satu per satu ke banyak tujuan sekaligus.
+              </p>
+            </div>
 
-            <div className="flex items-center justify-between pt-6 border-t border-slate-50">
-              <div className="flex -space-x-2">
-                {/* Simulasi avatar user yang sudah pakai */}
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="w-7 h-7 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
-                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="user" />
-                  </div>
-                ))}
-                <span className="pl-4 text-xs text-slate-400 font-medium">+120 installs</span>
-              </div>
+            {/* Footer: Stats & Button */}
+            <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+              {/* <div className="flex items-center gap-x-3">
+                <div className="flex -space-x-2">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden shadow-sm">
+                      <img src={`https://i.pravatar.cc/100?img=${i + 15}`} alt="user" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+                <span className="text-xs text-slate-400 font-semibold tracking-tight">+120 installs</span>
+              </div> */}
 
               <Link
                 href="/app/broadcast"
-                className="flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-white text-sm font-bold hover:bg-emerald-600 shadow-lg shadow-slate-200 hover:shadow-emerald-200 transition-all active:scale-95"
+                className="flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-white text-sm font-bold hover:bg-emerald-600 shadow-lg shadow-slate-200 hover:shadow-emerald-200 transition-all active:scale-95 group/btn"
               >
                 Install
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
               </Link>
             </div>
           </div>

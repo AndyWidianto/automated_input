@@ -2,6 +2,7 @@
 
 import { Mail, Lock, User, CheckCircle } from 'lucide-react';
 import useSignup from '../lib/hooks/Signup';
+import Loading from '../components/Loading';
 
 
 
@@ -10,7 +11,8 @@ const SignUp = () => {
     handleChange,
     handleRegister,
     errors,
-    formData
+    formData,
+    loading
   } = useSignup()
 
   return (
@@ -120,9 +122,10 @@ const SignUp = () => {
             <div className="pt-2">
               <button
                 type="submit"
+                disabled={loading}
                 className="w-full flex justify-center py-3.5 px-6 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors"
               >
-                Create Account
+                <Loading loading={loading} text='Create Account' />
               </button>
             </div>
           </form>

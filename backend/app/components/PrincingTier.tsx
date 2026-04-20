@@ -1,4 +1,5 @@
 import { ThumbsUp } from "lucide-react";
+import Link from "next/link";
 
 
 
@@ -23,14 +24,14 @@ export const PricingTier = ({ tier, isMostPopular }: { tier: any; isMostPopular?
                 </li>
             ))}
         </ul>
-        <a
-            href={tier.href}
+        <Link
+            href="/store/payment"
             className={`mt-10 block w-full rounded-full px-8 py-3.5 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 ${tier.mostPopular
                 ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                 : 'bg-emerald-100 text-emerald-600 hover:bg-emerald-200'
                 }`}
         >
             {tier.cta}
-        </a>
+        </Link>
     </div>
 );

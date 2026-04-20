@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import useAxios from "./Axios";
 import { toast } from "sonner";
+import useAuthStore from "../store/authStore";
 
 
 interface Profile {
@@ -11,6 +12,7 @@ interface Profile {
 }
 export default function useProfile() {
     const { apiPrivate } = useAxios();
+    const { user } = useAuthStore();
     const [formData, setFormData] = useState<Profile>({
         name: "",
         email: ""
@@ -19,20 +21,20 @@ export default function useProfile() {
     const [profile, setProfile] = useState<Profile | null>(null);
     const [file, setFile] = useState<File | null>(null);
 
-    const fetchProfile = async () => {
-        try {
-            const res = await apiPrivate.get("/api/users");
-            console.log(res.data);
-            const data = res.data.user;
-            setProfile(data);
-            setFormData({
-                name: data.name,
-                email: data.email
-            })
-        } catch (err) {
-            console.error(err);
-        }
-    }
+    // const fetchProfile = async () => {
+    //     try {
+    //         const res = await apiPrivate.get("/api/users");
+    //         console.log(res.data);
+    //         const data = res.data.user;
+    //         setProfile(data);
+    //         setFormData({
+    //             name: data.name,
+    //             email: data.email
+    //         })
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // }
 
     const handleUploadProfile = async () => {
         if (!file) return;
@@ -82,8 +84,14 @@ export default function useProfile() {
     }
 
     useEffect(() => {
-        fetchProfile();
-    }, [])
+        // fetchProfile();
+        if (user) {
+            setFormData({
+                name: user.name,
+                email: user.email
+            })
+        }
+    }, [user])
 
     return {
         setFormData,
@@ -94,6 +102,7 @@ export default function useProfile() {
         handleUpdateProfile,
         setLoading,
         loading,
-        handleSubmit
+        handleSubmit,
+        user
     }
 }

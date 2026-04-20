@@ -18,7 +18,7 @@ export async function POST(request: Request) {
             sameSite: 'strict',
             maxAge: 3600000
         })
-        return NextResponse.json({ success, message, accessToken, refreshToken }, { status: 200 });
+        return NextResponse.json({ success, message, accessToken }, { status: 200 });
     } catch (error) {
         return handleError(error);
     }

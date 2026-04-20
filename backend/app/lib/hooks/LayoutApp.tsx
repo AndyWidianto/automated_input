@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAxios from "./Axios";
 import { toast } from "sonner";
 import { Home, Settings, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
+import useAuthStore from "../store/authStore";
 
 export default function useLayoutApp() {
     const { apiPrivate } = useAxios();
+    const { login, user } = useAuthStore();
     const [openProfile, setOpenProfile] = useState(false);
-    const route = useRouter();
-
-    const sidebars = [
+    const [sidebars, setSidebars] = useState([
         {
             id: 1,
             name: "Dashboard",
@@ -39,8 +39,8 @@ export default function useLayoutApp() {
             icon: <Settings size={18} />,
             active: false,
         }
-    ]
-
+    ])
+    const route = useRouter();
 
     const handleLogout = async () => {
         if (!confirm("Beneran mau logout nih? Nanti harus login lagi lho!")) return;
@@ -55,10 +55,41 @@ export default function useLayoutApp() {
         }
     }
 
+    const handleSelect = (idx: number) => {
+        const newSidebar = sidebars.map((side, index) => {
+            if (idx === index) {
+                side.active = true;
+            } else {
+                side.active = false;
+            }
+            return side;
+        });
+        setSidebars(newSidebar);
+    }
+
+    const getProfile = async () => {
+        try {
+            const res = await apiPrivate.get("/api/users");
+            const data = res.data;
+            console.log(data);
+            login(data.user);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    useEffect(() => {
+        if (!user) {
+            getProfile();
+        }
+    }, [])
+
     return {
         handleLogout,
         sidebars,
         openProfile,
-        setOpenProfile
+        setOpenProfile,
+        handleSelect,
+        user
     }
 }

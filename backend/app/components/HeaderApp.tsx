@@ -4,7 +4,19 @@ import { ChevronDown, Settings, User, LogOut } from "lucide-react";
 import useLayoutApp from "../lib/hooks/LayoutApp";
 
 export default function HeaderApp({ setSidebarOpen }: { setSidebarOpen: (open: boolean) => void }) {
-    const { handleLogout, setOpenProfile, openProfile } = useLayoutApp();
+    const { handleLogout, setOpenProfile, openProfile, user } = useLayoutApp();
+
+    const planStyles = {
+        FREE: "bg-slate-100 text-slate-600 border-slate-200",
+        PRO: "bg-emerald-50 text-emerald-700 border-emerald-200",
+        ENTERPRISE: "bg-blue-50 text-blue-700 border-blue-200",
+    };
+
+    const planLabels = {
+        FREE: "Free Plan",
+        PRO: "Pro Plan",
+        ENTERPRISE: "Enterprise",
+    };
 
     return (
         <header className="fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 sm:px-8 flex items-center justify-between z-40">
@@ -36,7 +48,9 @@ export default function HeaderApp({ setSidebarOpen }: { setSidebarOpen: (open: b
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Free Plan</span>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${planStyles[user?.plan as "FREE" | "PRO" | "ENTERPRISE"] || planStyles.FREE}`}>
+                        {user && user.plan ? planLabels[user.plan as "FREE" | "PRO" | "ENTERPRISE"] || 'Unknown' : ''}
+                    </span>
                 </div>
 
                 <div className="h-8 w-[1px] bg-gray-200 mx-2 hidden sm:block"></div>
@@ -50,7 +64,7 @@ export default function HeaderApp({ setSidebarOpen }: { setSidebarOpen: (open: b
                     >
                         <div className="relative">
                             <img
-                                src="https://i.pravatar.cc/40"
+                                src="/user.png"
                                 alt="Profile"
                                 className="w-9 h-9 rounded-full border-2 border-white shadow-sm object-cover"
                             />
@@ -58,8 +72,8 @@ export default function HeaderApp({ setSidebarOpen }: { setSidebarOpen: (open: b
                         </div>
 
                         <div className="text-left hidden sm:block">
-                            <p className="text-sm font-bold text-gray-800 leading-none">Andy Widianto</p>
-                            <p className="text-[10px] font-medium text-gray-400 uppercase mt-1">Administrator</p>
+                            <p className="text-sm font-bold text-gray-800 leading-none">{user?.name}</p>
+                            <p className="text-[10px] font-medium text-gray-400 uppercase mt-1">{user?.role}</p>
                         </div>
                         <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${openProfile ? 'rotate-180' : ''}`} />
                     </button>
@@ -69,19 +83,19 @@ export default function HeaderApp({ setSidebarOpen }: { setSidebarOpen: (open: b
                         <div className="absolute right-0 mt-3 w-56 rounded-2xl bg-white shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden z-50 animate-in fade-in zoom-in duration-200 origin-top-right">
                             <div className="px-4 py-3 border-b border-gray-50 bg-gray-50/50">
                                 <p className="text-xs text-gray-400 font-medium">Signed in as</p>
-                                <p className="text-sm font-semibold text-gray-700 truncate">andy@example.com</p>
+                                <p className="text-sm font-semibold text-gray-700 truncate">{user?.email}</p>
                             </div>
 
                             <div className="p-2">
                                 <a
-                                    href="/dashboard/profile"
+                                    href="/store/profile"
                                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                                 >
                                     <User className="w-4 h-4" />
                                     Profile
                                 </a>
                                 <a
-                                    href="/dashboard/setting"
+                                    href="/store/setting"
                                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                                 >
                                     <Settings className="w-4 h-4" />

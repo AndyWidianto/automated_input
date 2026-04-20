@@ -3,6 +3,7 @@
 import React from 'react';
 import { Mail, Lock, UserPlus } from 'lucide-react';
 import useLogin from '../lib/hooks/Login';
+import Loading from '../components/Loading';
 
 const GoogleIcon = () => (
     <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +22,8 @@ const LoginPage: React.FC = () => {
         setEmail, 
         password, 
         email,
-        errors
+        errors,
+        loading
      } = useLogin();
 
     return (
@@ -105,9 +107,10 @@ const LoginPage: React.FC = () => {
                         <div>
                             <button
                                 type="submit"
+                                disabled={loading}
                                 className="w-full flex justify-center py-3.5 px-6 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
                             >
-                                Sign in
+                                <Loading loading={loading} text='Sign in' />
                             </button>
                         </div>
                     </form>

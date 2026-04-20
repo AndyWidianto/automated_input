@@ -5,7 +5,7 @@ import { User, Mail, Shield, CreditCard, ExternalLink, Camera } from 'lucide-rea
 import Link from 'next/link';
 
 const ProfilePage = () => {
-  const { formData, setFormData, handleSubmit, loading } = useProfile();
+  const { formData, setFormData, handleSubmit, loading, user } = useProfile();
   return (
     <div className="min-h-screen bg-[#f8fafc] p-4 sm:p-10">
       <div className="max-w-4xl mx-auto">
@@ -23,7 +23,7 @@ const ProfilePage = () => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                 <div className="relative group">
                   <img 
-                    src="https://i.pravatar.cc/150" 
+                    src="/user.png" 
                     alt="Profile" 
                     className="w-24 h-24 rounded-2xl object-cover border-4 border-slate-50 shadow-sm"
                   />
@@ -32,8 +32,8 @@ const ProfilePage = () => {
                   </button>
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-xl font-bold text-slate-900">Andy Widianto</h2>
-                  <p className="text-slate-500 text-sm">Full-stack Developer • Indonesia</p>
+                  <h2 className="text-xl font-bold text-slate-900">{user?.name}</h2>
+                  {/* <p className="text-slate-500 text-sm">Full-stack Developer • Indonesia</p> */}
                   <div className="mt-3 flex gap-2">
                     <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-100">
                       Active User
@@ -121,7 +121,7 @@ const ProfilePage = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border border-slate-100 rounded-2xl bg-slate-50/30">
               <div>
                 <p className="text-sm font-bold text-slate-700">Password</p>
-                <p className="text-xs text-slate-400">Terakhir diperbarui 2 bulan yang lalu</p>
+                {/* <p className="text-xs text-slate-400">Terakhir diperbarui 2 bulan yang lalu</p> */}
               </div>
               <button className="mt-4 sm:mt-0 text-sm font-bold text-emerald-600 hover:text-emerald-700 underline-offset-4 hover:underline">
                 Update Password

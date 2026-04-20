@@ -51,7 +51,19 @@ export async function Login(email: string, password: string, deviceId?: string) 
         }
     });
 
-    return { success: true, message: "Login berhasil", accessToken, refreshToken };
+    const user = {
+        id: existing.id,
+        email: existing.email,
+        name: existing.name,
+        role: existing.role,
+        plan: existing.plan,
+        createdAt: existing.createdAt,
+        updatedAt: existing.updatedAt,
+    }
+
+    return {
+        success: true, message: "Login berhasil", accessToken, refreshToken, user
+    };
 }
 
 export async function Register(name: string, email: string, password: string) {

@@ -6,7 +6,7 @@ import useLayoutApp from "../lib/hooks/LayoutApp";
 
 
 export default function SidebarApp({ isOpen, setSidebarOpen }: { isOpen: boolean; setSidebarOpen: (open: boolean) => void }) {
-    const { sidebars, handleLogout } = useLayoutApp();
+    const { sidebars, handleLogout, handleSelect } = useLayoutApp();
 
     return (
         <>
@@ -39,10 +39,11 @@ export default function SidebarApp({ isOpen, setSidebarOpen }: { isOpen: boolean
                 {/* Navigation */}
                 <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
                     <p className="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4">Main Menu</p>
-                    {sidebars.map((sidebar) => (
+                    {sidebars.map((sidebar, idx) => (
                         <Link
                             key={sidebar.id}
                             href={sidebar.url}
+                            onClick={() => handleSelect(idx)}
                             className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 group ${sidebar.active
                                 ? "bg-emerald-500/10 text-emerald-500 shadow-[inset_0_0_0_1px_rgba(16,185,129,0.2)]"
                                 : "text-gray-400 hover:bg-white/5 hover:text-white"

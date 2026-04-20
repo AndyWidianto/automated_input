@@ -98,54 +98,85 @@ const pricingTiers = [
 
 const LandingPage: React.FC = () => {
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-900">
-
+        <div className="min-h-screen bg-white text-slate-900 selection:bg-emerald-100">
             <main>
-                <div className="relative isolate px-6 pt-10 lg:px-8">
-                    <div className="mx-auto max-w-4xl py-20 sm:py-24 lg:py-30">
-                        <div className="text-center">
-                            <h1 className="text-4xl font-extrabold tracking-tight text-gray-950 sm:text-6xl">
-                                Automate Data Input from Excel.
+                {/* Hero Section */}
+                <div className="relative isolate overflow-hidden bg-[radial-gradient(45rem_50rem_at_top,theme(colors.emerald.50),white)]">
+                    {/* Background Decorative Grid */}
+                    <svg
+                        className="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+                        aria-hidden="true"
+                    >
+                        <defs>
+                            <pattern
+                                id="0787a7c5-978c-4f86-83c0-20a31f7d882d"
+                                width={200}
+                                height={200}
+                                x="50%"
+                                y={-1}
+                                patternUnits="userSpaceOnUse"
+                            >
+                                <path d="M.5 200V.5H200" fill="none" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" strokeWidth={0} fill="url(#0787a7c5-978c-4f86-83c0-20a31f7d882d)" />
+                    </svg>
+
+                    <div className="mx-auto max-w-5xl px-6 pt-20 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-20">
+                        <div className="mx-auto max-w-3xl text-center">
+                            <div className="mb-8 flex justify-center">
+                                <span className="rounded-full px-3 py-1 text-sm font-medium leading-6 text-emerald-600 ring-1 ring-inset ring-emerald-600/10 bg-emerald-50">
+                                    New: AI-Powered Mapping is here
+                                </span>
+                            </div>
+                            <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-7xl">
+                                Automate Data Input <br />
+                                <span className="bg-gradient-to-r from-emerald-600 to-teal-500 selection:text-gray-800 bg-clip-text text-transparent">
+                                    from Excel to Web.
+                                </span>
                             </h1>
-                            <p className="mt-6 text-lg leading-8 text-gray-600">
-                                Stop entering data one by one. Upload your spreadsheet and automatically fill and submit forms across websites—saving hours of manual work every day.
+                            <p className="mt-8 text-lg leading-8 text-slate-600 max-w-2xl mx-auto">
+                                Stop entering data one by one. Upload your spreadsheet and let our automation handle the tedious forms—saving you hours of manual work every single day.
                             </p>
-                            <div className="mt-10 flex items-center justify-center gap-x-6">
-                                <Link href="/signup" className="rounded-full bg-emerald-600 px-8 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
-                                    Try it Free
+                            <div className="mt-12 flex items-center justify-center gap-x-6">
+                                <Link
+                                    href="/signup"
+                                    className="rounded-xl bg-emerald-600 px-10 py-4 text-sm font-bold text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all hover:-translate-y-0.5"
+                                >
+                                    Get Started for Free
                                 </Link>
-                                <Link href="/home/learn-more" className="text-sm font-semibold leading-6 text-gray-950 flex items-center gap-x-1">
-                                    Learn more <span aria-hidden="true">→</span>
+                                <Link href="/home/learn-more" className="text-sm font-semibold leading-6 text-slate-900 group">
+                                    View Demo <span className="inline-block transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
                                 </Link>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="features" className="py-24 sm:py-32 bg-white">
+                {/* Features Section */}
+                <div id="features" className="py-24 sm:py-32 relative">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:text-center">
-                            <h2 className="text-base font-semibold leading-7 text-emerald-600">
-                                Bulk Data Automation
+                            <h2 className="text-base font-bold uppercase tracking-wider text-emerald-600">
+                                Efficiency First
                             </h2>
-                            <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
-                                From Excel to Web—Automated
-                            </p>
-                            <p className="mt-6 text-lg leading-8 text-gray-600">
-                                Upload your spreadsheet and automatically fill and submit forms across websites.
-                                Save hours of manual work, reduce errors, and process thousands of entries effortlessly—right from your browser.
+                            <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+                                Everything you need to scale.
                             </p>
                         </div>
+
                         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-                            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+                            <dl className="grid max-w-xl grid-cols-1 gap-x-12 gap-y-16 lg:max-w-none lg:grid-cols-3">
                                 {features.map((feature) => (
-                                    <div key={feature.name} className="flex flex-col">
-                                        <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-950">
-                                            <feature.icon className="h-6 w-6 flex-none text-emerald-600" aria-hidden="true" />
+                                    <div key={feature.name} className="relative pl-16 transition-all hover:bg-slate-50 p-6 rounded-2xl">
+                                        <dt className="text-base font-bold leading-7 text-slate-900">
+                                            <div className="absolute left-4 top-6 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 shadow-md shadow-emerald-200">
+                                                <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
+                                            </div>
                                             {feature.name}
                                         </dt>
-                                        <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
-                                            <p className="flex-auto">{feature.description}</p>
+                                        <dd className="mt-2 text-base leading-7 text-slate-600">
+                                            {feature.description}
                                         </dd>
                                     </div>
                                 ))}
@@ -154,22 +185,26 @@ const LandingPage: React.FC = () => {
                     </div>
                 </div>
 
-                <div id="pricing" className="py-24 sm:py-32">
+                {/* Pricing Section */}
+                <div id="pricing" className="py-24 sm:py-32 bg-slate-50">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                        <div className="mx-auto max-w-2xl text-center">
-                            <h2 className="text-base font-semibold leading-7 text-emerald-600">
-                                Pricing
-                            </h2>
-                            <p className="mt-2 text-3xl font-extrabold tracking-tight text-gray-950 sm:text-4xl">
-                                Simple, Transparent Pricing
-                            </p>
-                            <p className="mt-6 text-lg leading-8 text-gray-600">
-                                Choose a plan that fits your workflow. Start for free and upgrade as you automate more tasks and save more time.
+                        <div className="mx-auto max-w-2xl text-center mb-16">
+                            <h2 className="text-base font-bold text-emerald-600">Pricing</h2>
+                            <p className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
+                                Simple, Transparent Plans
                             </p>
                         </div>
-                        <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-10 lg:grid-cols-3 lg:max-w-none lg:gap-x-12">
+                        <div className="isolate mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3">
                             {pricingTiers.map((tier) => (
-                                <PricingTier key={tier.name} tier={tier} isMostPopular={tier.mostPopular} />
+                                <div
+                                    key={tier.name}
+                                    className={`rounded-3xl p-8 ring-1 transition-all duration-300 ${tier.mostPopular
+                                            ? 'bg-white ring-emerald-600 shadow-2xl scale-105 z-10'
+                                            : 'bg-white/60 ring-slate-200 hover:ring-emerald-300 shadow-sm'
+                                        }`}
+                                >
+                                    <PricingTier tier={tier} isMostPopular={tier.mostPopular} />
+                                </div>
                             ))}
                         </div>
                     </div>

@@ -2,11 +2,14 @@
 
 import { toast } from "sonner";
 import useAxios from "./Axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import useAuthStore from "../store/authStore";
 
 export default function useLogin() {
     const { apiPublic } = useAxios();
+    const { login } = useAuthStore();
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
@@ -28,6 +31,7 @@ export default function useLogin() {
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();
         if (!validateForm()) return;
+        setLoading(true);
         try {
             const res = await apiPublic.post('/api/auth/login', {
                 email,
@@ -36,18 +40,29 @@ export default function useLogin() {
             if (res.data.accessToken) {
                 localStorage.setItem("token", res.data.accessToken);
             }
+            const data = res.data;
+            login(data.user);
             toast.success('Login successful!');
-            console.log('Login successful:', res.data);
+            console.log('Login successful:', data);
             router.push('/store');
         } catch (error) {
             toast.error((error as any).response?.data?.message || 'Login failed!');
             console.error('Login failed:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleGoogleLogin = () => {
         console.log('Logging in with Google');
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            router.push("/store");
+        }
+    }, []);
 
     return {
         handleGoogleLogin,
@@ -57,6 +72,7 @@ export default function useLogin() {
         password,
         email,
         setErrors,
-        errors
+        errors,
+        loading
     }
 }

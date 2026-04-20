@@ -22,6 +22,7 @@ export default function useSignup() {
         password: '',
         confirmPassword: ''
     });
+    const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Partial<FormDataToInput>>({});
     const router = useRouter();
 
@@ -51,6 +52,7 @@ export default function useSignup() {
         e.preventDefault();
 
         if (!validateForm()) return;
+        setLoading(true);
 
         try {
             const res = await apiPublic.post('/api/auth/register', {
@@ -64,9 +66,9 @@ export default function useSignup() {
         } catch (error) {
             toast.error('Registration failed!');
             console.error('Registration failed:', error);
+        } finally {
+            setLoading(false);
         }
-
-        console.log(formData);
     };
 
     return {
@@ -74,6 +76,7 @@ export default function useSignup() {
         handleRegister,
         errors,
         handleChange,
-        formData
+        formData,
+        loading
     }
 }
