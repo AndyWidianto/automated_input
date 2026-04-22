@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "seed:all": "tsx seeders/index",
     "dev": "next dev",
-    "build": "prisma generate && prisma migrate deploy && npm run sedd:all && next build",
+    "build": "prisma generate && prisma migrate deploy && npm run seed:all && next build",
     "start": "next start",
-    "lint": "eslint",
-    "seed:all": "tsx seeders/index"
+    "lint": "eslint"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
