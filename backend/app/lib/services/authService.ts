@@ -76,7 +76,7 @@ export async function Register(name: string, email: string, password: string, ot
     if (!existing) {
         throw new AppError("OTP not found", 404);
     }
-    if (existing.otpCode !== otp) {
+    if (!otp || existing.otpCode !== otp) {
         throw new BadRequestError("OTP is not valid");
     }
     const supabase = createClient();

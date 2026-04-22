@@ -5,9 +5,9 @@ import { NextResponse } from "next/server";
 
 
 export async function POST(request: Request) {
-    const { name, email, password } = await request.json();
+    const { name, email, password, otp } = await request.json();
     try {
-        const { success, message } = await Register(name, email, password);
+        const { success, message } = await Register(name, email, password, otp);
         if (!success) {
             return NextResponse.json({ success, message }, { status: 400 });
         }
