@@ -2,6 +2,9 @@ import { prisma } from "../prisma";
 import bcrypt from "bcryptjs";
 import { createAccessToken, createRefreshToken, verifyRefreshToken } from "../token.service";
 import { AppError, BadRequestError } from "../errors";
+import { createClient } from "../supabase";
+import { Resend } from 'resend';
+import { Template } from "../emails/template";
 
 
 export async function Login(email: string, password: string, deviceId?: string) {
@@ -66,26 +69,42 @@ export async function Login(email: string, password: string, deviceId?: string) 
     };
 }
 
-export async function Register(name: string, email: string, password: string) {
-    const existing = await prisma.user.findUnique({
-        where: { email },
+export async function Register(name: string, email: string, password: string, otp: string) {
+    const existing = await prisma.otpVerification.findFirst({
+        where: { email }
     });
+    if (!existing) {
+        throw new AppError("OTP not found", 404);
+    }
+    if (existing.otpCode !== otp) {
+        throw new BadRequestError("OTP is not valid");
+    }
+    const supabase = createClient();
+    const { data: authData, error: authError } = await (await supabase).auth.signUp({
+        email,
+        password,
+        options: {
+            data: { email },
+        },
+    })
 
-    if (existing) {
-        throw new BadRequestError("Email sudah terdaftar");
+    if (authError) throw authError
+
+    if (authData.user) {
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = await prisma.user.create({
+            data: {
+                id: authData.user.id,
+                name,
+                email,
+                password: hashedPassword,
+                role: "USER",
+            },
+        });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await prisma.user.create({
-        data: {
-            name,
-            email,
-            password: hashedPassword,
-            role: "USER",
-        },
-    });
-
-    return { success: true, message: "Registrasi berhasil", user: { id: newUser.id, email: newUser.email } };
+    return { success: true, message: "Registrasi berhasil" };
 }
 
 export async function refreshToken(token: string) {
@@ -98,6 +117,46 @@ export async function refreshToken(token: string) {
 
     return { success: true, message: "Token refreshed successfully", accessToken };
 }
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export async function sendOtpVerification(email: string) {
+    const existing = await prisma.user.findFirst({
+        where: { email }
+    });
+    if (!existing) {
+        throw new AppError("Email is already", 400);
+    }
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+    await prisma.otpVerification.upsert({
+        where: { email: email },
+        update: {
+            otpCode: otpCode,
+            expiresAt: expiresAt,
+            createdAt: new Date(),
+        },
+        create: {
+            email: email,
+            otpCode: otpCode,
+            expiresAt: expiresAt,
+        },
+    });
+
+    const { data, error } = await resend.emails.send({
+        from: 'Automate <no-reply@anstoreautomated.biz.id>',
+        to: email,
+        subject: 'Verify your Automate account',
+        html: Template(otpCode)
+    });
+
+    if (error) throw error;
+
+    return { success: true, message: 'OTP sent successfully' };
+}
+
 
 
 export async function Logout(token: string) {

@@ -1,9 +1,11 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Zap, Clock, Sparkles, Building2, BrainCircuit, ThumbsUp, ShieldCheck, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { PricingTier } from '../components/PrincingTier';
+import useAxios from '../lib/hooks/Axios';
+import { Plan } from '../lib/types';
 
 
 
@@ -55,7 +57,6 @@ const pricingTiers = [
         features: [
             '50 automation runs / day',
             'Basic field detection',
-            'Excel upload (limited)',
             'Community support',
         ],
         href: '#',
@@ -65,14 +66,13 @@ const pricingTiers = [
     },
     {
         name: 'Pro',
-        price: '49k/month',
+        price: '29k/month',
         description: 'For individuals who need higher limits and faster automation.',
         features: [
             '500 automation runs / day',
             'Full Excel / CSV upload',
             'Smart field detection',
             'Bulk processing support',
-            'Priority support',
         ],
         href: '#',
         icon: Zap,
@@ -88,6 +88,7 @@ const pricingTiers = [
             'Everything in Pro',
             'Higher performance processing',
             'Advanced automation rules',
+            'Multi-user Access (5 Seats)'
         ],
         href: '#',
         icon: Building2,
@@ -97,6 +98,21 @@ const pricingTiers = [
 ];
 
 const LandingPage: React.FC = () => {
+    // const { apiPrivate } = useAxios();
+    // const [plans, setPlans] = useState<Plan[]>([]);
+    // const fetchPlans = async () => {
+    //     try {
+    //         const res = await apiPrivate.get("/api/plans");
+    //         console.log(res.data);
+    //         const data = res.data;
+    //         setPlans(data);
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // }
+    // useEffect(() => {
+    //     fetchPlans();
+    // }, [])
     return (
         <div className="min-h-screen bg-white text-slate-900 selection:bg-emerald-100">
             <main>

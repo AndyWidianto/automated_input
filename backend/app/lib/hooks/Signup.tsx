@@ -7,10 +7,10 @@ import useAxios from "./Axios";
 
 
 interface FormDataToInput {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
 }
 
 export default function useSignup() {
@@ -22,6 +22,8 @@ export default function useSignup() {
         password: '',
         confirmPassword: ''
     });
+    const [otp, setOtp] = useState("");
+    const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Partial<FormDataToInput>>({});
     const router = useRouter();
@@ -71,12 +73,39 @@ export default function useSignup() {
         }
     };
 
+    const handleVerifyOtp = async (e: React.SubmitEvent) => {
+        e.preventDefault();
+        if (!formData.email.trim()) return;
+        try {
+            const res = await apiPublic.post("/api/otp-send", {
+                email: formData.email
+            });
+
+            // Beri feedback kalau email berhasil terkirim
+            toast.success("Verification code sent to your email!");
+            console.log(res.data);
+
+            // Pindah ke tahap input OTP
+            setStep(2);
+        } catch (err: any) {
+            console.error("OTP Send Error:", err);
+            const errorMessage = err?.response?.data?.message || err?.response?.data?.error || "Failed to send OTP. Please try again.";
+
+            toast.error(errorMessage);
+        }
+    }
+
     return {
         setErrors,
         handleRegister,
         errors,
         handleChange,
         formData,
-        loading
+        loading,
+        setStep,
+        step,
+        otp,
+        setOtp,
+        handleVerifyOtp
     }
 }

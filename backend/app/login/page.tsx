@@ -15,132 +15,134 @@ const GoogleIcon = () => (
 );
 
 const LoginPage: React.FC = () => {
-    const { 
-        handleLogin, 
-        handleGoogleLogin, 
-        setPassword, 
-        setEmail, 
-        password, 
+    const {
+        handleLogin,
+        handleGoogleLogin,
+        setPassword,
+        setEmail,
+        password,
         email,
         errors,
         loading
-     } = useLogin();
+    } = useLogin();
 
     return (
-        <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="flex items-center justify-center gap-x-3">
-                    {/* <img src="/logo.png" alt="Logo" className='h-10 w-10' /> */}
-                    <div className="h-10 w-10 bg-emerald-600 rounded-lg flex items-center justify-center">
+        <div className="min-h-screen bg-[#FDFDFD] text-slate-900 flex flex-col justify-center py-12 px-6 lg:px-8">
+            {/* Header Section */}
+            <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+                <div className="flex items-center justify-center gap-x-3 mb-8">
+                    <div className="h-12 w-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200 -rotate-3 hover:rotate-0 transition-transform duration-500">
                         <span className="text-white font-bold text-xl">AN</span>
                     </div>
-                    <span className="text-3xl font-extrabold text-gray-950">Automate</span>
+                    <span className="text-3xl font-black text-slate-900 tracking-tight">Automate</span>
                 </div>
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-950">Sign in to your account</h2>
+                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Welcome back</h2>
+                <p className="mt-3 text-slate-500 font-medium">
+                    Please enter your details to sign in
+                </p>
             </div>
 
-            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white py-8 px-4 shadow-sm sm:rounded-3xl sm:px-10 border border-gray-100">
+            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[420px]">
+                <div className="bg-white py-10 px-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:rounded-[40px] border border-slate-100">
                     <form className="space-y-6" onSubmit={handleLogin}>
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-950">
+                        {/* Email Field */}
+                        <div className="group">
+                            <label htmlFor="email" className="block text-[13px] font-bold text-slate-700 ml-1 mb-1.5 uppercase tracking-wider">
                                 Email address
                             </label>
-                            <div className="mt-1 relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <div className="relative">
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" aria-hidden="true" />
                                 <input
                                     id="email"
                                     name="email"
                                     type="email"
-                                    autoComplete="email"
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="appearance-none block w-full px-10 py-3 border border-gray-200 rounded-full shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+                                    className="block w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all"
                                     placeholder="name@company.com"
                                 />
                             </div>
-                            {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
+                            {errors.email && <p className="mt-2 text-xs text-red-500 font-medium ml-1">{errors.email}</p>}
                         </div>
 
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-950">
+                        {/* Password Field */}
+                        <div className="group">
+                            <label htmlFor="password" className="block text-[13px] font-bold text-slate-700 ml-1 mb-1.5 uppercase tracking-wider">
                                 Password
                             </label>
-                            <div className="mt-1 relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <div className="relative">
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" aria-hidden="true" />
                                 <input
                                     id="password"
                                     name="password"
                                     type="password"
-                                    autoComplete="current-password"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="appearance-none block w-full px-10 py-3 border border-gray-200 rounded-full shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
-                                    placeholder="Enter your password"
+                                    className="block w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all"
+                                    placeholder="••••••••"
                                 />
                             </div>
-                            {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
+                            {errors.password && <p className="mt-2 text-xs text-red-500 font-medium ml-1">{errors.password}</p>}
                         </div>
 
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between px-1">
                             <div className="flex items-center">
                                 <input
                                     id="remember-me"
                                     name="remember-me"
                                     type="checkbox"
-                                    className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
+                                    className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 rounded-md cursor-pointer"
                                 />
-                                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
+                                <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-600 font-medium cursor-pointer">
                                     Remember me
                                 </label>
                             </div>
 
                             <div className="text-sm">
-                                <a href="#" className="font-medium text-emerald-600 hover:text-emerald-500">
-                                    Forgot your password?
+                                <a href="#" className="font-bold text-emerald-600 hover:text-emerald-500 transition-colors">
+                                    Forgot password?
                                 </a>
                             </div>
                         </div>
 
-                        <div>
+                        <div className="pt-2">
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full flex justify-center py-3.5 px-6 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                                className="w-full flex justify-center items-center py-4 px-6 rounded-2xl text-sm font-bold text-white bg-slate-900 hover:bg-emerald-600 shadow-xl shadow-slate-200 hover:shadow-emerald-200 transition-all duration-300 active:scale-[0.98]"
                             >
                                 <Loading loading={loading} text='Sign in' />
                             </button>
                         </div>
                     </form>
 
-                    <div className="mt-8">
+                    {/* Social Divider */}
+                    <div className="mt-10">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-gray-200" />
+                                <div className="w-full border-t border-slate-100" />
                             </div>
-                            <div className="relative flex justify-center text-sm">
-                                <span className="px-2 bg-white text-gray-600">Or continue with</span>
+                            <div className="relative flex justify-center text-xs uppercase tracking-widest font-bold">
+                                <span className="px-4 bg-white text-slate-400">Or continue with</span>
                             </div>
                         </div>
 
-                        <div className="mt-6">
-                            <div>
-                                <button
-                                    onClick={handleGoogleLogin}
-                                    className="w-full flex justify-center items-center gap-x-3 py-3 px-6 border border-gray-200 rounded-full shadow-sm text-sm font-semibold text-gray-950 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
-                                >
-                                    <GoogleIcon />
-                                    Sign in with Google
-                                </button>
-                            </div>
+                        <div className="mt-8">
+                            <button
+                                onClick={handleGoogleLogin}
+                                className="w-full flex justify-center items-center gap-x-3 py-3.5 px-6 border border-slate-100 rounded-2xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all"
+                            >
+                                <GoogleIcon />
+                                Google Account
+                            </button>
                         </div>
                     </div>
 
-                    <p className="mt-10 text-center text-sm text-gray-600">
+                    <p className="mt-12 text-center text-sm text-slate-500 font-medium">
                         Not a member?{' '}
-                        <a href={`/signup`} target='_blank' className="font-semibold leading-6 text-emerald-600 hover:text-emerald-500 flex items-center gap-x-1.5 justify-center">
+                        <a href="/signup" className="inline-flex items-center gap-x-1.5 text-emerald-600 font-bold hover:underline underline-offset-4">
                             <UserPlus className="h-4 w-4" /> Start for Free
                         </a>
                     </p>

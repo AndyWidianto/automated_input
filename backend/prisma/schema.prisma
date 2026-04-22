@@ -34,6 +34,14 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model OtpVerification {
+  id        String   @id @default(uuid())
+  email     String   @unique 
+  otpCode   String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
 enum PlanPeriod {
   MONTHLY
   YEARLY
