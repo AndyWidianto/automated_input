@@ -59,7 +59,7 @@ export default function Header() {
                         href="/signup"
                         className="group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-bold text-white shadow-md shadow-emerald-200 transition-all hover:bg-emerald-700 hover:shadow-lg active:scale-95"
                     >
-                        <span>Get Started Free</span>
+                        <span>Get Started</span>
                         <div className="ml-2 transition-transform group-hover:translate-x-1">
                             <ChevronRight size={16} />
                         </div>

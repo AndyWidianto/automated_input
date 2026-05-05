@@ -61,7 +61,7 @@ export default function SidebarApp({ isOpen, setSidebarOpen }: { isOpen: boolean
                 <div className="p-4 border-t border-gray-900 space-y-4 bg-[#0d0d0e]">
 
                     {/* Upgrade Card */}
-                    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 p-4 shadow-lg">
+                    {/* <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 p-4 shadow-lg">
                         <div className="relative z-10">
                             <p className="text-xs font-bold text-emerald-100 uppercase tracking-wider">Pro Plan</p>
                             <p className="text-[11px] text-emerald-50/80 mt-1 mb-3">Dapatkan fitur otomasi tanpa batas!</p>
@@ -69,9 +69,8 @@ export default function SidebarApp({ isOpen, setSidebarOpen }: { isOpen: boolean
                                 Upgrade Now
                             </Link>
                         </div>
-                        {/* Hiasan lingkaran transparan di background card */}
                         <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full blur-2xl"></div>
-                    </div>
+                    </div> */}
 
                     <div className="space-y-1">
                         <button

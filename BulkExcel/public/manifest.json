@@ -32,7 +32,7 @@
     "default_path": "index.html"
   },
   "host_permissions": [
-    "https://anstoreautomated.biz.id/*"
+    "https://*.anstoreautomated.biz.id/*"
   ],
   "optional_host_permissions": [
     "https://*/*",

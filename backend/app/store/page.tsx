@@ -1,7 +1,11 @@
-import { FileSpreadsheet, ArrowRight, Plus } from "lucide-react";
+"use client";
+
+import { FileSpreadsheet, ArrowRight, Plus, FileText } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-[#f8fafc] p-4 sm:p-10">
       {/* Header Section */}
@@ -22,62 +26,67 @@ export default function HomePage() {
       </div>
 
       {/* Feature Cards Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-4">
 
         {/* Card Extension: Broadcast Excel */}
         <div className="group relative bg-white rounded-[2rem] border border-slate-200 p-8 hover:border-emerald-500/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300 overflow-hidden">
           {/* Background Decor (Subtle) */}
           <div className="absolute -right-8 -top-8 w-32 h-32 bg-emerald-50 rounded-full blur-3xl group-hover:bg-emerald-100 transition-colors"></div>
 
-          <div className="relative z-10 group">
-            {/* Header: Img & Badge */}
-            <div className="flex flex-col gap-y-6 mb-6">
-              <div className="flex justify-between items-start">
-                {/* Gambar dibuat jauh lebih besar (w-24 h-24) */}
-                <div className="w-24 h-24 rounded-3xl bg-emerald-50 flex items-center justify-center shadow-md shadow-emerald-100/50 group-hover:scale-105 transition-transform duration-500 overflow-hidden border border-emerald-100">
-                  <img
-                    src="/automated_excel.png"
-                    alt="automated"
-                    className="w-16 h-16 object-contain"
-                  />
+          <div className="relative z-10 group p-2">
+            {/* Header: Icon & Badge */}
+            <div className="relative mb-8">
+              {/* Dekoratif Glow di belakang gambar (muncul saat hover) */}
+              <div className="absolute -inset-4 bg-emerald-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              <div className="flex items-start justify-between">
+                <div className="relative">
+                  <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-100 group-hover:border-emerald-100 transition-colors">
+                    <img
+                      src="/automated_excel.png"
+                      alt="automated"
+                      className="w-14 h-14 object-contain transform group-hover:scale-110 transition-transform duration-500 ease-out"
+                    />
+                  </div>
                 </div>
-                <span className="bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg border border-emerald-100">
-                  Productivity
+
+                {/* Badge "New" atau "Popular" untuk pemanis */}
+                <span className="bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-100">
+                  Excel Core
                 </span>
               </div>
             </div>
 
-            {/* Text Content */}
-            <div>
-              <h2 className="text-2xl font-extrabold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors tracking-tight">
+            {/* Content */}
+            <div className="space-y-3 mb-8">
+              <h2 className="text-xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors tracking-tight flex items-center gap-2">
                 Broadcast from Excel
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
               </h2>
 
-              {/* Description dengan line-clamp agar minimal & maksimal 2 baris */}
-              <p className="text-slate-600 leading-relaxed mb-8 text-[15px] line-clamp-2 min-h-[3rem]">
-                Otomatisasi pengiriman pesan massal langsung dari file Excel. Hemat waktu hingga 90% tanpa perlu input manual satu per satu ke banyak tujuan sekaligus.
+              <p className="text-slate-500 leading-relaxed text-[14px] line-clamp-2 min-h-[2.5rem] group-hover:text-slate-600 transition-colors">
+                Otomatisasi pengiriman pesan massal langsung dari file Excel. Hemat waktu hingga 90% tanpa perlu input manual.
               </p>
             </div>
 
-            {/* Footer: Stats & Button */}
-            <div className="flex items-center justify-between pt-6 border-t border-slate-100">
-              {/* <div className="flex items-center gap-x-3">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden shadow-sm">
-                      <img src={`https://i.pravatar.cc/100?img=${i + 15}`} alt="user" className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-                <span className="text-xs text-slate-400 font-semibold tracking-tight">+120 installs</span>
-              </div> */}
+            {/* Footer: Action Buttons */}
+            <div className="flex items-center gap-3 pt-6 border-t border-slate-50">
+              <Link
+                href="/app/broadcast"
+                className="flex-1 flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-[13px] font-medium transition-all"
+              >
+                <FileText className="w-4 h-4" />
+                Document
+              </Link>
 
               <Link
                 href="/app/broadcast"
-                className="flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-white text-sm font-bold hover:bg-emerald-600 shadow-lg shadow-slate-200 hover:shadow-emerald-200 transition-all active:scale-95 group/btn"
+                className="flex-[1.5] flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-white text-[13px] font-bold hover:bg-emerald-600 shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:shadow-emerald-200/50 transition-all active:scale-95 group/btn overflow-hidden relative"
               >
-                Install
-                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                <span className="relative z-10 flex items-center gap-2">
+                  Install Extension
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                </span>
               </Link>
             </div>
           </div>

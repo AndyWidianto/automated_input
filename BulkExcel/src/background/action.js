@@ -2,40 +2,40 @@ import { apiPrivate } from "./api";
 
 export const sleep = (seconds) => new Promise(resolve => setTimeout(resolve, seconds * 1000));
 
-export async function createBroadcast({ totalRows, title }) {
-  try {
-    const response = await apiPrivate.post("/api/broadcast", { totalRows, title }, { withCredentials: true });
-    const broadcast = response.data.broadcast;
-    return broadcast;
-  } catch (error) {
-    console.error("Error creating broadcast:", error);
-    if (error.response && error.response.status === 429) {
-      chrome.runtime.sendMessage({ action: "STOP_BROADCAST" });
-      chrome.runtime.sendMessage({ action: "LIMIT_REACHED", message: "Limit mencapai batas. Broadcast dihentikan." });
-      console.warn("Limit mencapai batas. Broadcast dihentikan.");
-      return;
-    }
-    throw error;
-  }
-}
+// export async function createBroadcast({ totalRows, title }) {
+//   try {
+//     const response = await apiPrivate.post("/api/broadcast", { totalRows, title }, { withCredentials: true });
+//     const broadcast = response.data.broadcast;
+//     return broadcast;
+//   } catch (error) {
+//     console.error("Error creating broadcast:", error);
+//     if (error.response && error.response.status === 429) {
+//       chrome.runtime.sendMessage({ action: "STOP_BROADCAST" });
+//       chrome.runtime.sendMessage({ action: "LIMIT_REACHED", message: "Limit mencapai batas. Broadcast dihentikan." });
+//       console.warn("Limit mencapai batas. Broadcast dihentikan.");
+//       return;
+//     }
+//     throw error;
+//   }
+// }
 
 
-export async function updateBroadcast(broadcastId, { success, failed }) {
-  try {
-    await apiPrivate.patch(`/api/broadcast/${broadcastId}`, { successRows: success, failedRows: failed }, { withCredentials: true });
-  } catch (error) {
-    if (error.response && error.response.status === 429) {
-      chrome.runtime.sendMessage({ action: "STOP_BROADCAST" });
-      chrome.runtime.sendMessage({ action: "LIMIT_REACHED", message: "Limit mencapai batas. Broadcast dihentikan." });
-      console.warn("Limit mencapai batas. Broadcast dihentikan.");
-      return;
-    }
-  }
-}
+// export async function updateBroadcast(broadcastId, { success, failed }) {
+//   try {
+//     await apiPrivate.patch(`/api/broadcast/${broadcastId}`, { successRows: success, failedRows: failed }, { withCredentials: true });
+//   } catch (error) {
+//     if (error.response && error.response.status === 429) {
+//       chrome.runtime.sendMessage({ action: "STOP_BROADCAST" });
+//       chrome.runtime.sendMessage({ action: "LIMIT_REACHED", message: "Limit mencapai batas. Broadcast dihentikan." });
+//       console.warn("Limit mencapai batas. Broadcast dihentikan.");
+//       return;
+//     }
+//   }
+// }
 export async function startBroadcast({ payload, current_index, total_items, target_url, targetIndexButton, fields, delay }) {
-  const broadcast = await createBroadcast({ totalRows: total_items, title: `Broadcast ${new Date().toLocaleString()}` });
+  // const broadcast = await createBroadcast({ totalRows: total_items, title: `Broadcast ${new Date().toLocaleString()}` });
   const state = {
-    id: broadcast.id,
+    id: Date.now(),
     current_index,
     total_items,
     payload,
@@ -143,9 +143,9 @@ export async function runExecuteScript(tabId, state) {
     current_index: nextIndex
   }
   chrome.storage.local.set({ broadcast_state: newBroadcastState });
-  if (newBroadcastState.success_count % 10 === 0 || newBroadcastState.progress === "COMPLETED") {
-    await updateBroadcast(state.id, { success: newBroadcastState.success_count, failed: newBroadcastState.failed_count });
-  }
+  // if (newBroadcastState.success_count % 10 === 0 || newBroadcastState.progress === "COMPLETED") {
+  //   await updateBroadcast(state.id, { success: newBroadcastState.success_count, failed: newBroadcastState.failed_count });
+  // }
 }
 
 export async function nextBroadcastStep() {
@@ -161,10 +161,10 @@ export async function nextBroadcastStep() {
 
     if (isCompleted) {
       console.log("Broadcast selesai, membersihkan state...");
-      await updateBroadcast(state.id, {
-        success: state.success_count,
-        failed: state.failed_count
-      });
+      // await updateBroadcast(state.id, {
+      //   success: state.success_count,
+      //   failed: state.failed_count
+      // });
       await chrome.storage.local.remove("broadcast_state");
     } else {
       const newBroadcastState = {

@@ -17,7 +17,8 @@ const SignUp = () => {
     handleVerifyOtp,
     otp,
     setStep,
-    setOtp
+    setOtp,
+    loadingOtp
   } = useSignup();
 
   if (step === 2) {
@@ -88,14 +89,28 @@ const SignUp = () => {
             </form>
 
             {/* Resend Timer Section */}
-            <div className="mt-8 pt-6 border-t border-slate-50">
-              <div className="flex justify-center items-center gap-2 bg-emerald-50/50 py-3 px-4 rounded-xl">
-                <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                <p className="text-[13px] text-emerald-700 font-medium">
-                  Kirim ulang kode dalam <span className="font-bold underline">59 detik</span>
-                </p>
+            {loadingOtp > 0 ? (
+              <div className="mt-8 pt-6 border-t border-slate-50">
+                <div className="flex justify-center items-center gap-2 bg-emerald-50/50 py-3 px-4 rounded-xl">
+                  <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <p className="text-[13px] text-emerald-700 font-medium">
+                    Kirim ulang kode dalam <span className="font-bold underline">{loadingOtp} detik</span>
+                  </p>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mt-8 pt-6 border-t border-slate-50">
+                <div className="flex justify-center items-center gap-2 bg-emerald-50/50 py-3 px-4 rounded-xl">
+                  <button
+                    onClick={handleVerifyOtp}
+                    className="text-[13px] text-slate-700 font-bold hover:text-emerald-600 flex items-center gap-1 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" /><path d="M16 16h5v5" /></svg>
+                    Kirim Ulang Kode Sekarang
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -120,7 +135,7 @@ const SignUp = () => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[440px]">
         <div className="bg-white py-10 px-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:rounded-[40px] border border-slate-100">
-          <form className="space-y-6" onSubmit={handleVerifyOtp}>
+          <div className="space-y-6">
 
             {/* Username Field */}
             <div className="group">
@@ -199,14 +214,14 @@ const SignUp = () => {
 
             <div className="pt-2">
               <button
-                type="submit"
+                onClick={handleVerifyOtp}
                 disabled={loading}
                 className="w-full flex justify-center items-center py-4 px-6 rounded-2xl text-sm font-bold text-white bg-slate-900 hover:bg-emerald-600 shadow-xl shadow-slate-200 hover:shadow-emerald-200 transition-all duration-300 active:scale-[0.98]"
               >
                 <Loading loading={loading} text='Create Account' />
               </button>
             </div>
-          </form>
+          </div>
 
           <div className="mt-10 flex flex-col items-center gap-4">
             <p className="text-sm text-slate-500 font-medium">

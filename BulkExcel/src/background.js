@@ -1,4 +1,4 @@
-import { clearBroadcastProgress, startBroadcast, createBroadcast, nextBroadcastStep, runExecuteScript, updateBroadcast, sleep } from "./background/action";
+import { clearBroadcastProgress, startBroadcast, nextBroadcastStep, runExecuteScript, sleep } from "./background/action";
 
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
@@ -98,12 +98,12 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       last_update: Date.now()
     };
 
-    if (updatedState.success_count % 10 === 0 || updatedState.progress === "COMPLETED") {
-      await updateBroadcast(state.id, {
-        success: updatedState.success_count,
-        failed: updatedState.failed_count
-      });
-    }
+    // if (updatedState.success_count % 10 === 0 || updatedState.progress === "COMPLETED") {
+    //   await updateBroadcast(state.id, {
+    //     success: updatedState.success_count,
+    //     failed: updatedState.failed_count
+    //   });
+    // }
 
     await chrome.storage.local.set({ broadcast_state: updatedState });
     console.log(`Index diperbarui ke: ${nextIndex}. Menunggu navigasi berikutnya...`);

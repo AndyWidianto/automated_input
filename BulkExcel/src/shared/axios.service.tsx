@@ -7,25 +7,6 @@ import { toast } from "sonner";
 const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:3000/api";
 
 
-const getTokenFromWeb = () => {
-    return new Promise((resolve, _reject) => {
-        chrome.cookies.get({
-            url: baseUrl,
-            name: "refreshToken"
-        }, (cookie: any) => {
-            if (chrome.runtime.lastError) {
-                return resolve(null);
-            }
-
-            if (cookie) {
-                resolve(cookie.value);
-            } else {
-                resolve(null);
-            }
-        });
-    });
-};
-
 export default function useAxios() {
     const navigate = useNavigate();
     const apiPrivate = axios.create({
@@ -80,10 +61,15 @@ export default function useAxios() {
             if (error.response?.status === 401 && !originalRequest._retry) {
                 originalRequest._retry = true;
 
-                const refreshToken = await getTokenFromWeb();
+                const stat = await chrome.storage.local.get(["refreshToken"]);
+                const refreshToken = stat.refreshToken;
                 if (!refreshToken) {
                     console.log("Tidak ada refresh token, silakan login ulang");
                     chrome.tabs.create({ url: `${baseUrl}/login` });
+                    await chrome.storage.local.remove("token");
+                    await chrome.storage.local.remove("broadcast_state");
+                    await chrome.storage.local.remove("refreshToken");
+                    window.close();
                     return;
                 }
                 try {
@@ -102,7 +88,8 @@ export default function useAxios() {
                     console.error("Refresh token expired. Logging out...");
                     navigate("/login");
                     await chrome.storage.local.remove("token");
-                    await chrome.storage.local.remove("refresh_token");
+                    await chrome.storage.local.remove("broadcast_state");
+                    await chrome.storage.local.remove("refreshToken");
                     return Promise.reject(refreshError);
                 }
             }

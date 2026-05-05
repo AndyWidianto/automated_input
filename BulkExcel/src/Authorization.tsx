@@ -1,44 +1,41 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 export default function Authorization({ children }: { children: React.ReactNode }) {
-  const chrome = (window as any).chrome;
-  const baseUrl = import.meta.env.VITE_BASE_URL;
+  // const chrome = (window as any).chrome;
+  // const baseUrl = import.meta.env.VITE_BASE_URL;
 
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showLoginModal, _setShowLoginModal] = useState(false);
 
-  const getTokenFromWeb = () => {
-    return new Promise((resolve, _reject) => {
-      chrome.cookies.get({
-        url: baseUrl,
-        name: "refreshToken"
-      }, (cookie: any) => {
-        if (chrome.runtime.lastError) {
-          return resolve(null);
-        }
+  // const getTokenFromWeb = async () => {
+  //   const allCookies = await new Promise((resolve) => {
+  //     chrome.cookies.getAll({ domain: "anstoreautomated.biz.id" }, (cookies: any[]) => {
+  //       resolve(cookies);
+  //     });
+  //   });
+  //   const targetCookie = (allCookies as any[]).find(c => c.name === "refreshToken");
+  //   if (targetCookie) {
+  //     await chrome.storage.local.set({ refreshToken: targetCookie.value });
+  //     return targetCookie.value;
+  //   } else {
+  //     console.log("Token tidak ditemukan di storage.");
+  //     return null;
+  //   }
+  // };
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     const token = await getTokenFromWeb();
+  //     if (!token) {
+  //       setShowLoginModal(true);
+  //     }
+  //   };
+  //   checkAuth();
+  // }, []);
 
-        if (cookie) {
-          resolve(cookie.value);
-        } else {
-          resolve(null);
-        }
-      });
-    });
-  };
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = await getTokenFromWeb();
-      if (!token) {
-        setShowLoginModal(true);
-      }
-    };
-    checkAuth();
-  }, []);
-
-  const handleLoginRedirect = () => {
-    chrome.tabs.create({ url: `${baseUrl}/login` });
-    window.close();
-  };
+  // const handleLoginRedirect = () => {
+  //   chrome.tabs.create({ url: `${baseUrl}/login` });
+  //   window.close();
+  // };
   return (
     <div>
       {showLoginModal ? (
@@ -66,7 +63,7 @@ export default function Authorization({ children }: { children: React.ReactNode 
 
             <div className="w-full space-y-3">
               <button
-                onClick={handleLoginRedirect}
+                onClick={() => { /*handleLoginRedirect*/}}
                 className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-sm shadow-xl shadow-blue-200 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
               >
                 Login Sekarang
@@ -81,7 +78,7 @@ export default function Authorization({ children }: { children: React.ReactNode 
             </div>
           </div>
         </div>
-      ): children}
+      ) : children}
     </div>
   );
 }

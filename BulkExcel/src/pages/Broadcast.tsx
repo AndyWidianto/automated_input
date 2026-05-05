@@ -1,4 +1,4 @@
-import { ShieldAlert, ShieldCheck, Timer, Trash2 } from "lucide-react";
+import { CheckCircle, ChevronDown, ChevronUp, ShieldAlert, ShieldCheck, Timer, Trash2, X } from "lucide-react";
 import useBroadcast from "../shared/hooks/Broadcast";
 
 
@@ -22,7 +22,11 @@ export default function Broadcast() {
         setFields,
         handleRequestPermission,
         sheets,
-        onSheetSelect
+        onSheetSelect,
+        values,
+        isOpen,
+        setIsOpen,
+        TypeProgress
     } = useBroadcast()
 
     return (
@@ -44,7 +48,7 @@ export default function Broadcast() {
                         <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
                             <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Pilih Sheet</h3>
                             <button
-                                onClick={() => {}} // Asumsi: mengosongkan sheets untuk menutup modal
+                                onClick={() => { }} // Asumsi: mengosongkan sheets untuk menutup modal
                                 className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                             >
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +135,7 @@ export default function Broadcast() {
 
                     {/* Import Section */}
                     <div className="space-y-3">
-                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.1em]">1. Siapkan Sumber Data</label>
+                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.1em]">Siapkan Sumber Data</label>
                         <div className="group relative flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl p-8 bg-slate-50 hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer overflow-hidden">
                             <input type="file" accept=".xlsx, .xls" ref={fileInputRef} onChange={handleChangeFile} className="absolute inset-0 opacity-0 z-10 cursor-pointer" />
                             <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
@@ -144,7 +148,7 @@ export default function Broadcast() {
 
                     {/* URL & Config Section */}
                     <div className="space-y-5">
-                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.1em]">2. Konfigurasi Target</label>
+                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.1em]">Konfigurasi Target</label>
 
                         <div className="space-y-4">
                             <div className="relative">
@@ -153,23 +157,9 @@ export default function Broadcast() {
                                     value={urlWebsite}
                                     onChange={(e) => setUrlWebsite(e.target.value)}
                                     className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm font-medium"
-                                    placeholder="https://situs-target-desa.com"
+                                    placeholder="https://situs-target.com"
                                 />
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg">🔗</span>
-                            </div>
-
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={stat.delay}
-                                    name="delay"
-                                    onChange={handleChange}
-                                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm font-medium"
-                                    placeholder="1"
-                                />
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2">
-                                    <Timer size={20} />
-                                </span>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -184,11 +174,27 @@ export default function Broadcast() {
                             </div>
                         </div>
                     </div>
+                    <div className="space-y-5">
+                        <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.1em]">Waktu Jeda</label>
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={stat.delay}
+                                name="delay"
+                                onChange={handleChange}
+                                className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-sm font-medium"
+                                placeholder="1"
+                            />
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2">
+                                <Timer size={20} />
+                            </span>
+                        </div>
+                    </div>
 
                     <div className="space-y-4 pt-2">
                         <div className="flex justify-between items-center px-1">
                             <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.1em]">
-                                3. Pemetaan Field (Mapping)
+                                Pemetaan Field (Mapping)
                             </label>
                             <button
                                 type="button"
@@ -287,6 +293,74 @@ export default function Broadcast() {
                 </div>
             </div>
 
+            {isOpen && <div onClick={() => setIsOpen(false)} className="fixed w-full h-screen bg-black/10"></div>}
+            {values.length > 0 && (
+                <div
+                    className={`fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full md:w-[600px]  bg-gray-50 border border-gray-300 border-b-0 shadow-[0_-8px_20px_-6px_rgba(0,0,0,0.15)]  rounded-t-[2.5rem]  transition-all duration-500 ease-in-out flex flex-col items-center overflow-hidden ${isOpen ? 'h-[50vh] p-6' : 'h-12 p-2 hover:bg-gray-100 cursor-pointer'}`}
+                    onClick={() => !isOpen && setIsOpen(true)}
+                >
+                    {!isOpen ? (
+                        <div className="flex flex-col items-center justify-center text-gray-500 group-hover:text-blue-600 transition-colors cursor-pointer">
+                            <div className="animate-bounce"><ChevronUp className="w-5 h-5" /></div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest leading-none">Open</span>
+                        </div>
+                    ) : (
+                        <div className="w-full h-full flex flex-col">
+                            <div className="flex justify-between items-center mb-4 w-full">
+                                <h3 className="font-bold text-gray-700">Data Procces</h3>
+                                <button onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}>
+                                    <ChevronDown className="w-5 h-5 text-gray-400 hover:text-gray-600" />
+                                </button>
+                            </div>
+
+
+                            <div className="flex-1 overflow-auto w-full border border-gray-100 rounded-2xl shadow-inner bg-white/50 backdrop-blur-sm">
+                                <table className="min-w-full border-separate border-spacing-0 text-sm">
+                                    <thead className="bg-gray-50/80 sticky top-0 z-20">
+                                        <tr>
+                                            {Object.keys(values[0]).map((key, idx) => (
+                                                key !== "status" ? <th key={idx} className="p-4 text-left font-bold text-gray-600 uppercase text-[10px] tracking-wider border-b border-gray-100 whitespace-nowrap">{key}</th> :
+                                                    <th key={idx} className="p-4 text-center font-bold text-gray-600 uppercase text-[10px] tracking-wider border-b border-gray-100 sticky right-0 bg-gray-50/90 backdrop-blur-md shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.05)]">
+                                                        Status
+                                                    </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-50">
+                                        {values.map((item, i) => (
+                                            <tr key={i} className="group hover:bg-blue-50/30 transition-colors">
+                                                {Object.entries(item).map(([key, val]) => (
+                                                    key !== "status" ? <td className="p-4 whitespace-nowrap">
+                                                        <span className="px-2 py-1 text-gray-600 rounded-md text-[12px] font-medium">
+                                                            {val as string}
+                                                        </span>
+                                                    </td> :
+                                                        <td className="p-4 text-center sticky right-0 bg-white/80 backdrop-blur-md group-hover:bg-blue-50/80 transition-all shadow-[-10px_0_15px_-5px_rgba(0,0,0,0.05)]">
+                                                            <div className="flex items-center justify-center gap-3">
+                                                                {val === TypeProgress.pending ? <div className="relative flex items-center justify-center">
+                                                                    <div className="w-6 h-6 rounded-full border-[3px] border-gray-100 border-t-blue-500 animate-spin"></div>
+                                                                    <div className="absolute w-1 h-1 bg-blue-500 rounded-full animate-pulse"></div>
+                                                                </div> : val === TypeProgress.success ?
+                                                                    <div className="relative flex items-center justify-center">
+                                                                        <CheckCircle className="w-6 h-6 fill-green-200 text-green-600" />
+                                                                    </div> :
+                                                                    <div className="relative flex items-center justify-center w-6 h-6 rounded-full p-1 bg-red-100">
+                                                                        <X className="w-6 h-6 text-red-600" />
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+            )}
             {/* Progress Bar/Drawer tetap di bawah seperti kode kamu */}
         </div>
     )

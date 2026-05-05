@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Zap, Clock, Sparkles, Building2, BrainCircuit, ThumbsUp, ShieldCheck, Globe } from 'lucide-react';
+import { Zap, Clock, Sparkles, Building2, BrainCircuit, ThumbsUp, ShieldCheck, Globe, LayoutGrid } from 'lucide-react';
 import Link from 'next/link';
 import { PricingTier } from '../components/PrincingTier';
 import useAxios from '../lib/hooks/Axios';
@@ -17,33 +17,33 @@ interface Feature {
 
 const features: Feature[] = [
     {
-        name: 'Privacy-First Processing',
-        description: 'All data is processed locally in your browser. No uploads, no servers, and all data is automatically cleared after each automation run.',
-        icon: ShieldCheck,
+        name: 'AI-Powered Automation',
+        description: 'Fill complex forms with a single prompt. Our AI understands context to complete tasks in seconds, not minutes.',
+        icon: BrainCircuit, // Menonjolkan sisi AI
     },
     {
-        name: 'Instant Autofill',
-        description: 'Fill inputs and forms instantly without manual typing.',
+        name: 'Unified Extension Hub',
+        description: 'Access all your productivity tools in one place. One account to manage and sync every extension you own.',
+        icon: LayoutGrid, // Atau icon hub lainnya
+    },
+    {
+        name: 'Advanced Bulk Processing',
+        description: 'Effortlessly automate data entry from Excel or JSON directly to any web interface with high precision.',
         icon: Zap,
     },
     {
+        name: 'Secure & Synchronized',
+        description: 'Your settings and automation scripts are securely stored and synced across devices via your account.',
+        icon: ShieldCheck, // Mengganti narasi "No servers" menjadi "Secure Sync" karena sekarang ada sistem login
+    },
+    {
         name: 'Smart Field Detection',
-        description: 'Automatically detects input fields across any website.',
-        icon: BrainCircuit,
-    },
-    {
-        name: 'Error Reduction',
-        description: 'Minimize mistakes with consistent and accurate autofill.',
-        icon: ShieldCheck,
-    },
-    {
-        name: 'Works Across Websites',
-        description: 'Compatible with most websites and web applications.',
+        description: 'Intelligently identifies input fields, dropdowns, and buttons across diverse web applications.',
         icon: Globe,
     },
     {
-        name: 'Time Saving Automation',
-        description: 'Eliminate repetitive typing and boost productivity.',
+        name: 'Workflow Efficiency',
+        description: 'Eliminate repetitive manual work and reduce human error with consistent, automated workflows.',
         icon: Clock,
     },
 ];
@@ -145,25 +145,26 @@ const LandingPage: React.FC = () => {
                                     New: AI-Powered Mapping is here
                                 </span>
                             </div>
-                            <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-7xl">
-                                Automate Data Input <br />
+                            <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
+                                Smart Extensions <br />
                                 <span className="bg-gradient-to-r from-emerald-600 to-teal-500 selection:text-gray-800 bg-clip-text text-transparent">
-                                    from Excel to Web.
+                                    for Intelligent Workflows.
                                 </span>
                             </h1>
                             <p className="mt-8 text-lg leading-8 text-slate-600 max-w-2xl mx-auto">
-                                Stop entering data one by one. Upload your spreadsheet and let our automation handle the tedious forms—saving you hours of manual work every single day.
+                                From AI-powered form filling with a single prompt to bulk Excel-to-Web automation.
+                                Sign in to access our full suite of extensions and transform how you interact with the web.
                             </p>
                             <div className="mt-12 flex items-center justify-center gap-x-6">
                                 <Link
                                     href="/signup"
                                     className="rounded-xl bg-emerald-600 px-10 py-4 text-sm font-bold text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all hover:-translate-y-0.5"
                                 >
-                                    Get Started for Free
+                                    Get Started
                                 </Link>
-                                <Link href="/home/learn-more" className="text-sm font-semibold leading-6 text-slate-900 group">
+                                {/* <Link href="/home/learn-more" className="text-sm font-semibold leading-6 text-slate-900 group">
                                     View Demo <span className="inline-block transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
-                                </Link>
+                                </Link> */}
                             </div>
                         </div>
                     </div>
@@ -202,7 +203,7 @@ const LandingPage: React.FC = () => {
                 </div>
 
                 {/* Pricing Section */}
-                <div id="pricing" className="py-24 sm:py-32 bg-slate-50">
+                {/* <div id="pricing" className="py-24 sm:py-32 bg-slate-50">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl text-center mb-16">
                             <h2 className="text-base font-bold text-emerald-600">Pricing</h2>
@@ -215,8 +216,8 @@ const LandingPage: React.FC = () => {
                                 <div
                                     key={tier.name}
                                     className={`rounded-3xl p-8 ring-1 transition-all duration-300 ${tier.mostPopular
-                                            ? 'bg-white ring-emerald-600 shadow-2xl scale-105 z-10'
-                                            : 'bg-white/60 ring-slate-200 hover:ring-emerald-300 shadow-sm'
+                                        ? 'bg-white ring-emerald-600 shadow-2xl scale-105 z-10'
+                                        : 'bg-white/60 ring-slate-200 hover:ring-emerald-300 shadow-sm'
                                         }`}
                                 >
                                     <PricingTier tier={tier} isMostPopular={tier.mostPopular} />
@@ -224,7 +225,7 @@ const LandingPage: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                </div>
+                </div> */}
             </main>
         </div>
     );

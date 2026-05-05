@@ -25,7 +25,7 @@ export default function useBroadcast() {
     const [sheets, setSheets] = useState<string[]>([]);
     const [workbook, setWorkbook] = useState<xlsx.WorkBook | null>(null);
     const [stat, setStat] = useState({
-        start: 0,
+        start: 1,
         end: 0,
         delay: 1,
     })
@@ -216,6 +216,9 @@ export default function useBroadcast() {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
         if (!tab?.id) return toast.error("Tab Tidak Terdeteksi");
+        const tabUrl = tab.url;
+        console.log("Url: ", tab.url);
+        setUrlWebsite(tabUrl);
 
         await chrome.scripting.executeScript({
             target: { tabId: tab.id },

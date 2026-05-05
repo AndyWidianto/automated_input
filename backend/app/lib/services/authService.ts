@@ -124,7 +124,7 @@ export async function sendOtpVerification(email: string) {
     const existing = await prisma.user.findFirst({
         where: { email }
     });
-    if (!existing) {
+    if (existing) {
         throw new AppError("Email is already", 400);
     }
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();

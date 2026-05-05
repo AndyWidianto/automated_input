@@ -1,27 +1,6 @@
 import axios from "axios";
 
 
-
-const getTokenFromWeb = () => {
-    return new Promise((resolve, _reject) => {
-        chrome.cookies.get({
-            url: baseUrl,
-            name: "refreshToken"
-        }, (cookie) => {
-            if (chrome.runtime.lastError) {
-                return resolve(null);
-            }
-
-            if (cookie) {
-                resolve(cookie.value);
-            } else {
-                resolve(null);
-            }
-        });
-    });
-};
-
-
 const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 export const apiPrivate = axios.create({
     baseURL: baseUrl,
@@ -58,7 +37,8 @@ apiPrivate.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            const refreshToken = await getTokenFromWeb();
+            const stat = await chrome.storage.local.get(["refreshToken"]);
+            const refreshToken = stat.refreshToken;
             if (!refreshToken) {
                 console.log("Tidak ada refresh token, silakan login ulang");
                 chrome.tabs.create({ url: `${baseUrl}/login` });
@@ -82,7 +62,8 @@ apiPrivate.interceptors.response.use(
                     action: "LOGOUT_REQUIRED"
                 })
                 await chrome.storage.local.remove("token");
-                await chrome.storage.local.remove("refresh_token");
+                await chrome.storage.local.remove("refreshToken");
+                await chrome.storage.local.remove("broadcast_state");
                 return Promise.reject(refreshError);
             }
         }
