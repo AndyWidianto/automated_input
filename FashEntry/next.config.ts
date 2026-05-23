@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
       }
     ]
   },
-  serverExternalPackages: ['pdf-parse', 'tesseract.js'],
+  serverExternalPackages: ['tesseract.js'],
 };
 
 export default nextConfig;

@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, FileText, ArrowRight, RefreshCw, Download, FileSpreadsheet, File, CheckCircle2, Shield, Info } from 'lucide-react';
 import useAxios from '@/app/lib/hooks/Axios';
+import { toast } from 'sonner';
 
 export default function ConvertToDocs() {
   const [file, setFile] = useState<File | null>(null);
@@ -29,12 +30,11 @@ export default function ConvertToDocs() {
       const response = await apiPrivate.post('/api/converttodocs', dataToSend);
       const result = response.data;
       setOutput(result.document);
-      console.log('Hasil OCR:', result);
-
       setIsProcessing(false);
       setIsSuccess(true);
     } catch (error) {
       setIsProcessing(false);
+       toast.error('Gagal mengompres gambar. Silakan coba lagi.');
     } finally {
       setIsProcessing(false);
     }

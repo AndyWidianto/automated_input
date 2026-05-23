@@ -11,7 +11,7 @@ export default function HomePage() {
       id: 'ocr-converter',
       title: 'Image to Docs',
       description: 'Ekstrak teks dari gambar secara instan menjadi file Word/Docs yang bisa diedit kembali tanpa ketik ulang.',
-      badge: 'Populer',
+      badge: 'Terbaru',
       icon: <FileText className="text-slate-700" size={22} />,
       iconBg: 'bg-slate-100 border border-slate-200/60',
       url: "/store/converttodocs",
@@ -24,7 +24,16 @@ export default function HomePage() {
       icon: <Image className="text-slate-700" size={22} />,
       iconBg: 'bg-slate-100 border border-slate-200/60',
       url: "/store/upscaler",
-    }
+    },
+    {
+      id: 'compressor',
+      title: 'Image Compressor',
+      description: 'Kompres gambar menjadi ukuran yang lebih kecil tanpa mengurangi kualitas secara signifikan.',
+      badge: 'Terbaru',
+      icon: <Image className="text-slate-700" size={22} />,
+      iconBg: 'bg-slate-100 border border-slate-200/60',
+      url: "/store/compresimage",
+    },
   ];
   const featuresExtensions = [
     {
